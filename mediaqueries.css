@@ -1,0 +1,337 @@
+@media screen and (max-width: 1400px) {
+   #profile{
+    height: 83vh;
+    margin-bottom: 6rem;
+   }
+   .about-containers{
+    flex-wrap: wrap;
+   }
+}
+
+
+@media screen and (max-width: 1200px) {
+    #desktop-nav {
+        display: none;
+    }
+    #hamburger-nav{
+        display: flex;
+    }
+    #experience,.experience-details-container{
+        margin-top: 2rem;
+    }
+    #profile, .section-container{
+        display:block;        
+    }
+    .arrow{
+        display: none;
+    }
+    section, .section-container{
+        height: fit-content;
+    }
+    section{
+        margin: 0 5%;
+    }
+    .section__pic-container{
+        width: 275px;
+        height: 275px;
+        margin: 0 auto 2rem;
+
+    }
+    .about-containers{
+        margin-top: 0;
+
+    }
+}
+@media screen and (max-width: 600px) {
+   #contact, footer{
+    height: 40vh;
+   }
+   #profile{
+    height: 83vh;
+    margin-bottom: 0;
+   }
+   article{
+    font-size: 1rem;
+   }
+   footer nav{
+    height: fit-content;
+    margin-bottom: 2rem;
+   }
+   .about-containers, .contact-info-upper-container, .btn-container, .article-container{
+    flex-wrap: wrap;
+
+   }
+   .contact-info-container{
+    margin: 0;
+   }
+   .contact-info-container p, .na-links li a {
+    font-size: 1rem;
+   }
+   .experience-subtitle{
+    font-size: 1.25rem;
+    
+   }
+   .logo{
+    font-size: 1.5rem;
+   }
+   .nav-links{
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+   }
+   .section__pic-container{
+    width: auto;
+    height: 70vw;
+    justify-content: center;
+   }
+   .about-pic{
+    width: auto;
+    height: 70vw;
+    justify-content: center;
+
+   }
+   .title{
+    font-size: 2rem;
+   }
+   .text-container{
+    text-align: justify;
+   }
+   .section__text__p2 {
+    font-size: 1.25rem;
+    
+ }
+ @media (max-width: 768px) {
+    .article-container {
+        flex-direction: column; /* Stack items vertically */
+        gap: 1.5rem; /* Reduce the gap for smaller screens */
+        padding: 0.5rem; /* Reduce padding */
+        width: 95%; /* Slightly smaller width for better centering */
+        margin: 0 auto 0 2%; /* Add left margin to shift it slightly left */
+    }
+}
+
+/* For medium screens (e.g., tablets) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .article-container {
+        flex-direction: row; /* Keep items in a row */
+        justify-content: center; /* Center items for medium screens */
+        gap: 2rem; /* Adjust spacing between items */
+        padding: 1rem; /* Restore padding for larger screens */
+        margin: 0 auto; /* Center horizontally */
+    }
+}
+@media (max-width: 768px) {
+    #experience {
+        padding: 1.5rem 0.5rem; /* Reduce padding on mobile */
+    }
+
+    .section__text__p1 {
+        font-size: 0.9rem; /* Slightly smaller text size for smaller screens */
+    }
+
+    .title {
+        font-size: 1.5rem; /* Reduce the title size for smaller screens */
+    }
+}
+@media (max-width: 768px) {
+    .section__pic-container {
+        height: 50vw; /* Set height as a percentage of viewport width */
+        width: 50vw; /* Keep width equal to height */
+    }
+}
+
+.section__pic-container img {
+    width: 100%; /* Ensure the image fills the container */
+    height: 100%; /* Ensure the image fills the container */
+    object-fit: cover; /* Ensures the image maintains its aspect ratio */
+}
+@media (max-width: 600px) {
+    .about-pic {
+        width: 100rem;
+        height: 100rem;
+    }
+}
+@media (max-width: 375px) { /* iPhone SE and similar dimensions */
+    #about {
+        padding: 10px; /* Reduce overall padding */
+        gap: 10px; /* Decrease spacing between items */
+    }
+
+    .section__text__p1 {
+        font-size: 0.9rem; /* Reduce text size */
+    }
+
+    .title {
+        font-size: 1.5rem; /* Reduce title size */
+    }
+
+    .section__pic-container {
+        max-width: 120px; /* Further reduce picture size */
+    }
+
+    .about-pic {
+        max-width: 120px; /* Keep the picture proportional */
+        margin-bottom: 0px;
+    }
+
+    .section-container {
+        gap: 10px; /* Decrease spacing */
+    }
+}
+@media (max-width: 375px) {
+    .section__pic-container {
+        margin-bottom: 5px; /* Reduce spacing below the picture */
+    }
+
+    .about-pic {
+        width: 100px; /* Smaller picture size */
+        height: 100px; /* Smaller picture size */
+    }
+
+    .about-details-container {
+        gap: 8px; /* Reduce spacing between details */
+    }
+
+    .details-container {
+        margin-top: 0; /* Ensure no top margin is added */
+    }
+
+    .about-paragraph-container {
+        padding: 10px; /* Compact paragraph padding */
+        margin-top: 10px; /* Ensure consistent spacing */
+    }
+}
+/* Adjustments for smaller and medium screens */
+@media (max-width: 768px) { /* Target medium screens and smaller */
+    .section__pic-container {
+        margin-bottom: 10px; /* Reduce space below the picture */
+    }
+
+    .about-details-container {
+        margin-top: 0; /* Eliminate unnecessary top margin */
+    }
+}
+
+@media (max-width: 375px) { /* Target smaller screens (e.g., iPhone SE) */
+    .section__pic-container {
+        margin-bottom: 5px; /* Further reduce space below the picture */
+    }
+
+    .about-details-container {
+        margin-top: 0; /* Ensure no gap on smaller screens */
+    }
+}
+@media (max-width: 768px) {
+    .about-pic {
+        width: 250px; /* Increase the size for medium screens */
+        height: 250px; /* Match the width for circular shape */
+    }
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 375px) {
+    .about-pic {
+        width: 280px; /* Further increase size for smaller screens */
+        height: 280px; /* Match the width for circular shape */
+    }
+}
+/* Adjustments for medium screens */
+@media (max-width: 768px) {
+    #profile {
+        margin-bottom: 20px; /* Reduce space below the profile section */
+    }
+
+    #about {
+        top: -200px; /* Reduce space above the about section */
+      
+    }
+    #experience {
+        top: -300px;
+    }
+    #research {
+        top: -300px;
+    }
+    #teaching {
+        top: -300px;
+    }
+    #awards {
+        top: -300px;
+    }
+    #projects {
+        top: -300px;
+    }
+    
+    
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 375px) { /* For very small screens (e.g., iPhone SE) */
+    #profile {
+        margin-bottom: 10px; /* Further reduce space below the profile section */
+    }
+
+    #about {
+        top: -200px; /* Further reduce space above the about section */
+        bottom: 0;
+    }
+    #experience {
+        top: -300px;
+    }
+    #research {
+        top: -300px;
+    }
+    #teaching {
+        top: -300px;
+    }
+    #awards {
+        top: -300px;
+    }
+    #projects {
+        top: -300px;
+    }
+    
+    
+    
+}
+/* Portrait mode for most iPads */
+@media (max-width: 834px) {
+    #profile {
+        margin-bottom: 20px;
+    }
+
+    #about {
+        top: -150px;
+    }
+
+    #experience, #research, #teaching, #awards, #projects {
+        top: -200px;
+    }
+}
+
+/* Landscape mode for iPads */
+@media (max-width: 1024px) {
+    #profile {
+        margin-bottom: 20px;
+    }
+
+    #about {
+        top: -100px;
+    }
+
+    #experience, #research, #teaching, #awards, #projects {
+        top: -150px;
+    }
+}
+@media (max-width: 1024px) {
+    #profile {
+        margin-bottom: 20px !important;
+    }
+
+    #about {
+        top: -100px !important;
+    }
+
+    #experience, #research, #teaching, #awards, #projects {
+        top: -150px !important;
+    }
+}

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mediaqueries.css">
+</head>
+<body>
+    <nav id="desktop-nav">
+        <div class="logo">Kenneth Franklin Gampol</div>
+        <div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li class="dropdown">
+                    <a href="#experience">Experience</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#experience">Professional</a></li>
+                        <li><a href="#research">Research</a></li>
+                        <li><a href="#teaching">Teaching</a></li>
+                        <li><a href="#awards">Awards</a></li>
+                    </ul>
+                </li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contacts</a></li>
+            </ul>
+        </div>
+    </nav>
+</body>
+
+    </nav>
+    <nav id="hamburger-nav">
+        <div class="logo">Kenneth Franklin Gampol</div>
+        <div class="hamburger-menu">
+            <div class="hamburger-icon" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+            </div>
+            <div class="menu-links">
+                <li><a href="#about" onclick="toggleMenu()">About</a></li>
+                <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
+                <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
+                <li><a href="#contact" onclick="toggleMenu()">Contacts</a></li>
+            </div>
+        </div>
+    </nav>
+    <section id="profile">
+        <div class="section__pic-container">
+            <img src="./assets/upenn-ken1.jpg" alt="Ken profile picture" class="circle-img">
+        </div>
+        <div class="section__text">
+            <p class="section__text__p1"> Hello, I'm </p>
+            <h1 class="title"> Kenneth</h1>
+            <p class="section__text__p2"> M.S. Computer Information Technology at UPenn</p>
+            <div class="btn-container">
+                <button 
+                    class=" btn btn-color-2" 
+                    onclick="window.open('./assets/MyCv.pdf')"
+                    >Download CV
+                </button>
+                <button 
+                    class=" btn btn-color-1" 
+                    onclick="location.href='./#contact'"
+                    >Contact Me
+                </button>
+            </div>
+            <div id="socials-container">
+                <img src="/assets/linkedin.png" alt="My LinkedIn profile"
+                class="icon" onclick="location.href='https://www.linkedin.com/in/kennethgampol/' " 
+                >
+                <img src="/assets/github.png" alt="My github profile"
+                class="icon" onclick="location.href='https://github.com/kgampol' " 
+                >
+            </div>
+        </div>
+    </section>
+    <section id="about">
+        <p class="section__text__p1"> Get To Know More</p>
+        <h1 class="title"> About Me</h1>
+        <div class="section-container">
+            <div class="section__pic-container">
+                <img 
+                src="./assets/Ken-medal1.jpg" 
+                alt="Profile Picture" 
+                class="about-pic"
+                >
+            </div>
+            <div class="about-details-container">
+                <div class="about-containers">
+                    <div class="details-container">
+                        <img src="./assets/experience.png" alt="Experience icon" class="icon">
+                        <h3>Current Position</h3>
+                        
+                        <p>Structural Analysis Engineer <br>Boeing</p>
+                        <img src="./assets/Boeing_Emblem.png" alt="Boeing Logo" class="company-logo">
+                    </div>
+                    <div class="details-container">
+                        <img src="./assets/education.png" alt="Education icon" class="icon">
+                        <h3>Education</h3>
+                        <div class="education-section">
+                            <h4>Undergraduate Studies</h4>
+                            <div class="education-details">
+                                <img src="./assets/UCM_Logos_Primary.png" alt="UC Merced Logo" class="school-logo1">
+                                <p>
+                                    <strong>School:</strong> University of California Merced <br>
+                                    <strong>Degree:</strong> Bachelors in Mechanical Engineering <br>
+                                    <strong>GPA:</strong> 3.8
+                                </p>
+                            </div>
+                        </div>
+    
+                        <!-- Graduate Section -->
+                        <div class="education-section">
+                            <h4>Graduate Studies</h4>
+                            <div class="education-details">
+                                <img src="./assets/pennlogo.png" alt="UPenn Logo" class="school-logo">
+                                <p>
+                                    <strong>School:</strong> University of Pennsylvania <br>
+                                    <strong>Degree:</strong> Masters in Computer Information Technology <br>
+                                    <strong>GPA:</strong> 4.0
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-paragraph-container">
+                <p>I am a master’s student in Computer Information Technology at the University of Pennsylvania, with a background in mechanical engineering from UC Merced, where I graduated magna cum laude. My professional experience at Boeing involved working on the 777-8 Freighter, where I performed detailed stress analyses and helped with the development of automation tools to improve engineering efficiency. At USC, I contributed to research on autonomous systems, applying Hamilton-Jacobi Reachability Analysis to enhance safety and decision-making for robotic vehicles using Python, LIDAR, and ROS 2. My goal is to break into the tech industry, where I can combine my engineering expertise and computer science education to drive innovation in automation, robotics, and safety-critical technologies. I am passionate about creating intelligent systems that solve real-world problems, enhance efficiency, and shape the future of technology.</p>
+                </div>
+            </div>
+        </div>
+        <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#experience'">
+    </section>
+ <!-- Structural Analysis Engineer Section -->
+<section id="experience">
+    <p class="section__text__p1">Explore My</p>
+    <h1 class="title">Professional Experience</h1>
+    <div class="details-container">
+        <h2 class="experience-sub-title">Structural Analysis Engineer</h2>
+        <p class="workplace">The Boeing Company</p>
+        <p>May 2024-Present</p>
+        <div class="article-container">
+            <article>
+
+                <div>
+                    <h3>Boeing Tools</h3>
+                    <p>I.S.A, X.S.A, IVT, Enovia</p>
+                </div>
+            </article>
+            <article>
+
+                <div>
+                    <h3>Finite Element Analysis</h3>
+                    <p>Patran & Nastran, Hand calculations</p>
+                </div>
+            </article>
+            <article>
+
+                <div>
+                    <h3>Computer Aided Design Software</h3>
+                    <p>Solidworks, NX, Catia</p>
+                </div>
+            </article>
+            <article>
+
+                <div>
+                    <h3>MACROs</h3>
+                    <p>VBA Excel</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#research'">
+</section>
+
+<!-- Research Sections -->
+<section id="research">
+    <h1 class="title">Research Experience</h1>
+
+    <!-- Safety Intelligence & Autonomy Lab -->
+    <div class="details-container">
+        <h2 class="experience-sub-title">Safety Intelligence & Autonomy Lab Research Assistant</h2>
+        <p class="workplace">University of Southern California</p>
+        <p>May 2024-August 2024</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>R.O.S 2</h3>
+                    <p>Primarily used Linux to run ROS 2 over Wi-Fi and control RC car dynamics via NVIDIA Jetson</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Matlab</h3>
+                    <p>Hamilton-Jacobi Reachability Analysis</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Python</h3>
+                    <p>Backward Reachability using hand calculations for wheel speed control</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <!-- team up -->
+    <div class="details-container">
+        <h2 class="experience-sub-title"> TEAMUP Consortium </h2>
+        <p class="workplace">University of California Merced</p>
+        <p> December 2023- May 2024</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Computer Aided Design</h3>
+                    <p>Solidworks</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Finite Element Analysis</h3>
+                    <p>Solidworks, COMSOL</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Python</h3>
+                    <p>data conversion, graphing, ML, and automation</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <!--  Sarah Kurtz Group Research Assistant  -->
+    <div class="details-container">
+        <h2 class="experience-sub-title">  Sarah Kurtz Group Research Assistant  </h2>
+        <p class="workplace">University of California Merced</p>
+        <p> December 2023- May 2024</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Phyton</h3>
+                    <p>data processing and automation</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Excel</h3>
+                    <p>Analysis of IV curves</p>
+                </div>
+            </article>
+
+        </div>
+    </div>
+    <!--   Danzi Group Undergraduate Researcher   -->
+    <div class="details-container">
+        <h2 class="experience-sub-title"> Danzi Group Undergraduate Researcher </h2>
+        <p class="workplace">University of California Merced</p>
+        <p>  October 2023- May 2024</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Solidworks & Catia</h3>
+                    <p>Primarily used to model a airfoil and build a model to include servo motors inside</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Computational Fluid Dynamics</h3>
+                    <p>Made sure airfoil was correctly caded and had no disconnect in aerodynamics</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Arduino</h3>
+                    <p>Controlled the servo motors inside the aerofoil to shape shift airfoil</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#teaching'">
+</section>
+
+<!-- Teaching Sections -->
+<section id="teaching">
+    <h1 class="title">Teaching Experience</h1>
+
+    <!-- Learning Assistant -->
+    <div class="details-container">
+        <h2 class="experience-sub-title">Learning Assistant</h2>
+        <p class="workplace">University of California Merced</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Math 005</h3>
+                    <p>Pre-Calculus</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 021</h3>
+                    <p> Calculus I for Physical Sciences and Engineering</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 022</h3>
+                    <p> Calculus II for Physical Sciences and Engineering</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <!-- Summer edge teaching Assistant -->
+    <div class="details-container">
+        <h2 class="experience-sub-title">Teaching Assistant Summer Edge</h2>
+        <p class="workplace">University of California Merced</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Chem 001</h3>
+                    <p>Introductory Chemistry</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <!-- Student Athlete Learning Assistant -->
+    <div class="details-container">
+        <h2 class="experience-sub-title"> Student Athlete Learning Assistant</h2>
+        <p class="workplace">University of California Merced</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Math 005</h3>
+                    <p>Pre-Calculus</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 021</h3>
+                    <p>Calculus I for Physical Sciences and Engineering</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 022</h3>
+                    <p>Calculus II for Physical Sciences and Engineering</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 023</h3>
+                    <p>Vector Calculus</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 024</h3>
+                    <p>Linear Algebra and Differential Equations</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>ME 021</h3>
+                    <p>Phyton and Matlab for Mechanical Engineers</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Math 120</h3>
+                    <p>Numerical Methods for Scientists & Engineers</p>
+                </div>
+            </article>
+        </div>
+    </div>
+    <!-- Stem Tutor -->
+    <div class="details-container">
+        <h2 class="experience-sub-title">STEM Tutor</h2>
+        <p class="workplace">University of California Merced</p>
+        <div class="article-container">
+            <article>
+                <div>
+                    <h3>Chem 001</h3>
+                    <p>Introductory Chemistry</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Physics 008</h3>
+                    <p>Introductory Physics I for Physical Sciences</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Physics 009</h3>
+                    <p>Introductory Physics II for Physical Sciences</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Engr 065</h3>
+                    <p>Circuit Theory</p>
+                </div>
+            </article>
+            <article>
+                <div>
+                    <h3>Engr 057</h3>
+                    <p>Statics & Dynamics</p>
+                </div>
+            </article>
+    </div>
+    <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#awa'">
+</section>
+<section id="awards">
+    <p class="section__text__p1">Some</p>
+    <h1 class="title">Awards</h1>
+    <div class="experience-details-container">
+        <div class="about-containers">
+        <div class="details-container color-container">
+            <div class="article-container">
+                <img src="./assets/top100.jpg" alt="award 1" class="award-img">
+            </div>
+            <h2 class="experience-sub-title project-title">2024 Top 100 Intern</h2>
+            <div class="btn-container">
+                <button class="btn-color-2 award-btn" onclick="location.href='https://www.nationalinternday.com/2024-top-100-interns'">
+                    View
+                </button>
+            </div>
+           
+            </div>
+        <div class="details-container color-container">
+            <div class="article-container">
+                <img src="./assets/win.png" alt="award 2" class="award-img">
+            </div>
+            <h2 class="experience-sub-title project-title"> Top Capstone Finisher</h2>
+            <div class="btn-container">
+                <button class="btn-color-2 award-btn" onclick="location.href='https://i2g.ucmerced.edu/'">
+                    View
+                </button>
+            </div>
+
+            </div>
+        </div>
+        <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#projects'">
+    </div>
+</section>
+<section id="projects">
+    <p class="section__text__p1">Browse My Recent</p>
+    <h1 class="title">Projects</h1>
+    <div class="experience-details-container">
+        <div class="about-containers">
+        
+        <div class="details-container color-container">
+            <div class="article-container">
+                <img src="./assets/f1.jpg" alt="Project 2" class="project-img">
+            </div>
+            <h2 class="experience-sub-title project-title">Facial Recognition</h2>
+            <div class="btn-container">
+                <button class="btn-color-2 award-btn" onclick="location.href='project.html?project=facial-recognition'">
+                   View
+                </button>
+                
+                </div>
+
+            </div>
+        <div class="details-container color-container">
+            <div class="article-container">
+                <img src="./assets/L1rocket.jpg" alt="Project 3" class="project-img">
+            </div>
+            <h2 class="experience-sub-title project-title">L1 Rocket</h2>
+            <div class="btn-container">
+                <button class="btn-color-2 award-btn" onclick="location.href='project.html?project=mach-rocket'">
+                    View
+                </button>
+                </div>
+
+            </div> 
+            <div class="details-container color-container">
+                <div class="article-container">
+                    <img src="./assets/ros2car.jpg" alt="Project 1" class="project-img">
+                </div>
+                <h2 class="experience-sub-title project-title">Self-Driving RC Car</h2>
+                <div class="btn-container">
+                    <button class="btn-color-2 award-btn" onclick="location.href='project.html?project=rc-car'">
+                        VIEW
+                    </button>
+                    </div>
+    
+                </div>
+        </div>
+        </div>
+        <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#contact'">
+    </div>
+</section>
+
+<section id="contact">
+    <p class="section__text__p1">Get in Touch</p>
+    <h1 class="title"> Contact Me</h1>
+    <div class="contact-info-upper-container">
+    <div class="contact-info-container">
+        <img src="./assets/email.png" alt="Email icon" class="icon contact-icon email-icon">
+        <p><a href="mailto:kgampol@seas.upenn.edu">Kgampol@seas.upenn.edu</a></p>
+
+    </div>
+    <div class="contact-info-container">
+        <img src="./assets/linkedin.png" alt="LinkedIn icon" class="icon contact-icon">
+        <p><a href="https://www.linkedin.com/in/kennethgampol/">LinkedIn</a></p>
+
+    </div>
+    <div>
+
+</section>
+<footer>
+    <nav><div class="nav-links-container linky">
+        <ul class="nav-links">
+            <li><a href="#about">Go Back</a></li>
+        </ul>
+    </div></nav>
+    <p>thx for reading!</p>
+</footer>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="pstyle.css">
+</head>
+<body>
+    <main id="p-details">
+        <h1 id="p-title">Project Title</h1>
+        <div id="p-content">
+            <div class="description-container">
+                <p>Loading project details...</p>
+            </div>
+        </div>
+        <!-- Go Back Button -->
+        <div class="btn-container">
+            <a href="index.html#projects" class="btn btn-color-2">Go Back</a>
+        </div>
+    </main>
+    <script>
+        // Script to dynamically load project details
+        const params = new URLSearchParams(window.location.search);
+        const project = params.get('project');
+
+        const projectData = {
+            'rc-car': {
+                title: 'Self-Driving RC Car',
+                description: 'I built a self-driving RC car using a Raspberry Pi and an RC car chassis, designed to navigate autonomously through reinforcement learning. The project involved designing custom components in SolidWorks, integrating sensors like LIDAR for environment mapping, and programming control algorithms in Python. I utilized ROS 2 for communication and navigation and trained the car using simulation data from Donkey Car’s open-source platform. This project enhanced my skills in robotics, computer vision, sensor integration, and real-time decision-making for autonomous systems.',
+                video: './assets/demorun.mp4',
+                skills: ['Python', 'ROS2', 'LIDAR','Computer Aided Design','3D printing'],
+            },
+            'facial-recognition': {
+                title: 'Facial Recognition',
+                description: 'I integrated a facial recognition system using a Raspberry Pi, OpenCV, and TensorFlow Lite, paired with a Logitech camera for image capture. The system was designed to detect and identify faces, drawing bounding boxes around recognized individuals. I trained the model with sample images to enable accurate recognition and experimented with real-time processing on the Raspberry Pi. This project enhanced my understanding of computer vision, machine learning, and hardware-software integration.',
+                video: './assets/opencv.mp4',
+                skills: ['OpenCV', 'TensorFlow', 'Machine Learning'],
+            },
+            'mach-rocket': {
+                title: 'L1 Rocket',
+                description: 'Successfully designed, built, and launched a model rocket with a H135 motor in compliance with safety regulations. It achieved <strong>4000ft apogee</strong> & <strong>Mach 1.1</strong> according to OpenRocket simulation.',
+                video: './assets/L1launch.mp4',
+                skills: ['SolidWorks', 'COMSOL', 'Aerodynamics'],
+            },
+        };
+
+        const projectDetails = projectData[project];
+        if (projectDetails) {
+            document.getElementById('p-title').innerText = projectDetails.title;
+            document.getElementById('p-content').innerHTML = `
+                <video controls>
+                    <source src="${projectDetails.video}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="description-container">
+                    <p>${projectDetails.description}</p>
+                </div>
+                <h3>Skills Used:</h3>
+                <ul>
+                    ${projectDetails.skills.map(skill => `<li>${skill}</li>`).join('')}
+                </ul>
+            `;
+        } else {
+            document.getElementById('p-content').innerHTML = `
+                <div class="description-container">
+                    <p>Project not found! Please go back and select a valid project.</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
