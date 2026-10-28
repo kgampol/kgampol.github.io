@@ -48,7 +48,7 @@ export function stepFlight(delta: number) {
   flight.velocity = damp(flight.velocity, v, 6, delta);
 }
 
-/* --- the descent profile, shared by the camera and the HUD --- */
+/* --- the descent profile, shared by the camera and the scene --- */
 
 export const CRUISE_ALT = 620; // world units at the top of the page
 export const FLOOR_ALT = 9; // where the jet levels out at the bottom
@@ -59,12 +59,6 @@ export const CLOUD_TOP = 330;
 export function altitudeAt(p: number) {
   const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
   return lerp(CRUISE_ALT, FLOOR_ALT, e);
-}
-
-/** altitude in feet, for the HUD readout */
-export function altitudeFeet(p: number) {
-  const a = altitudeAt(p);
-  return Math.round(((a - FLOOR_ALT) / (CRUISE_ALT - FLOOR_ALT)) * 41000 + 250);
 }
 
 /** nose pitch: level at the top, diving through the middle, flared at the end */
