@@ -23,8 +23,8 @@ function CameraRig() {
     const tanHalf = Math.tan(THREE.MathUtils.degToRad((camera as THREE.PerspectiveCamera).fov / 2));
 
     // Distance chosen so the ~11-unit wingspan covers a set share of the
-    // screen width: about a third on desktop, most of it on a phone.
-    const share = wide ? 0.34 : 0.72;
+    // screen width: about a third on desktop, a bit over half on a phone.
+    const share = wide ? 0.34 : 0.58;
     const back = THREE.MathUtils.clamp(11 / (2 * share * tanHalf * aspect), 18, 60);
     const halfW = tanHalf * back * aspect;
     const halfH = tanHalf * back;
@@ -35,10 +35,12 @@ function CameraRig() {
     camera.position.set(cx, alt + above, back);
 
     // Aim at a point below the jet at its own depth, which lifts the jet
-    // above centre by that amount: a touch on desktop, into the top third
-    // on phones, and a little more mid-dive so the clouds fill the frame.
+    // above centre by that amount: a touch on desktop, up near the nav on
+    // phones so it clears the copy. Mid-dive, desktop tips down a little
+    // more so the clouds fill the frame, while phones ease the jet down
+    // so its tails never slide under the nav.
     const dive = Math.sin(p * Math.PI);
-    const lift = (wide ? 0.06 : 0.38) * halfH + dive * 0.12 * halfH;
+    const lift = ((wide ? 0.06 : 0.68) + dive * (wide ? 0.12 : -0.08)) * halfH;
     look.set(cx, alt - lift, 0);
     camera.lookAt(look);
   });
