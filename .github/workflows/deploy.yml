@@ -1,40 +1,71 @@
-name: Deploy to GitHub Pages
+# One pipeline, two jobs:
+#   build  - every pull request and every push to main: clean install,
+#            type-check and production build. This is the PR check.
+#   deploy - pushes to main only: publishes the build to GitHub Pages.
+# The github-pages environment only accepts deployments from main, so the
+# condition on `deploy` and the environment rule agree.
+name: CI / Deploy
 
 on:
+  pull_request:
   push:
     branches: [main]
   workflow_dispatch:
 
+# least privilege by default; deploy asks for exactly what it needs
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
+# a newer push to the same PR supersedes the older check; runs on main
+# queue instead, so every merge gets built
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
+    name: Type-check and build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
         with:
-          node-version: 22
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
           cache: npm
+
+      # npm ci installs exactly what package-lock.json pins and fails if the
+      # lockfile and package.json disagree
       - run: npm ci
+
+      # `build` runs `tsc -b` before `vite build`, so a type error fails here
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
+    name: Deploy to GitHub Pages
     needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write # publish the artifact
+      id-token: write # prove the deployment came from this workflow
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # never cancel a deployment halfway; a newer one waits its turn
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
