@@ -6,8 +6,6 @@ export const profile = {
   role: "AI/ML Software Engineer",
   org: "The Boeing Company",
   location: "St. Louis, MO",
-  tagline:
-    "I build the AI pipelines, flight software, and autonomy systems that help aircraft fly smarter.",
   summary: [
     "I'm an AI/ML software engineer at Boeing in St. Louis, working where machine learning meets flight software: agentic code generation for flight test, real-time edge inference, and autonomous aerial refueling.",
     "I started as a mechanical engineer, so I think in loads, margins, and failure modes. I bring that habit to software. Everything I ship has to be fast, deterministic, and safe enough to put on an aircraft.",
