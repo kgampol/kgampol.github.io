@@ -1,5 +1,5 @@
-// Tiny maths helpers kept local so the HUD can import this module without
-// pulling three.js into the main bundle; the 3D scene is loaded lazily.
+// Tiny maths helpers kept local so this module has no three.js dependency
+// and stays cheap to import from outside the lazily loaded scene.
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 /** frame-rate independent exponential smoothing (same formula as three's damp) */
@@ -8,8 +8,8 @@ const damp = (x: number, y: number, lambda: number, dt: number) =>
 
 /*
   One shared flight state. The DOM writes the raw scroll target, the
-  scene's frame loop eases `progress` toward it, and anything else (the
-  HUD, the 3D objects) reads from here. Nothing in it triggers a React
+  scene's frame loop eases `progress` toward it, and the camera and 3D
+  objects read from here. Nothing in it triggers a React
   render, so scrolling never re-renders the page.
 */
 export const flight = {
