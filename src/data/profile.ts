@@ -33,7 +33,6 @@ export type Role = {
   logo?: string;
   place: string;
   dates: string;
-  callsign: string;
   points: string[];
   tags: string[];
 };
@@ -45,7 +44,6 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "St. Louis, MO",
     dates: "Aug 2025 — Present",
-    callsign: "SORTIE 03",
     points: [
       "Designed an agentic AI pipeline that automates C code generation for flight test, then pitched it to executive leadership and secured funding for full deployment.",
       "Built a C# pre-mission validation pipeline that runs pilots' planned trajectories through a simulation harness and flags anomalies automatically, cutting mission-plan review from months to hours.",
@@ -62,7 +60,6 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "St. Louis, MO",
     dates: "May 2025 — Aug 2025",
-    callsign: "SORTIE 02",
     points: [
       "Ran trade studies on advanced probe systems, balancing weight and manufacturability for next-generation aerial refueling platforms.",
       "Built AI-augmented stress-analysis tools that plug into Boeing's standard methods to speed up design iterations.",
@@ -75,7 +72,6 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "Long Beach, CA",
     dates: "May 2024 — May 2025",
-    callsign: "SORTIE 01",
     points: [
       "Built an automated Python optimizer that ingests FEA load cases from HyperMesh, structures them in Pandas, and streams results over UDP to resize parts to the optimal margin of safety at minimum weight.",
       "Retained to keep developing the tool for the 777-8F, and recognized as a Top 100 Intern in the Nation.",
@@ -87,7 +83,6 @@ export const experience: Role[] = [
     org: "Sun-Maid Growers of California",
     place: "Kingsburg, CA",
     dates: "Dec 2023 — Dec 2024",
-    callsign: "GROUND OPS",
     points: [
       "Led a team that deployed a computer vision quality-control system with GPIO-driven air rejection, removing defective goods at full conveyor speed.",
       "Projected $400K in labor savings over six years, started scaling to every packaging line, and earned Top Capstone Project.",
