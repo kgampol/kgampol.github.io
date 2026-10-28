@@ -147,14 +147,6 @@ export const research = [
     body: "Real-time safe trajectory planning on an autonomous RC car using Hamilton-Jacobi reachability, with a LiDAR-to-actuation pipeline in ROS 2 on an NVIDIA Jetson.",
     tags: ["ROS 2", "Hamilton-Jacobi", "LiDAR", "Jetson"],
   },
-  {
-    title: "MasterMind AI",
-    org: "Wharton AI Hackathon — Top 10 Finalist",
-    place: "Philadelphia, PA",
-    dates: "Mar 2025",
-    body: "Led a team that built a RAG study assistant in 24 hours, turning lecture material into adaptive quizzes.",
-    tags: ["RAG", "VectorDBs", "GPT-4", "Team Lead"],
-  },
 ];
 
 export const education = [
