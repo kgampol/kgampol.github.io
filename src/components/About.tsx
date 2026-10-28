@@ -4,7 +4,7 @@ import { Panel, Section } from "./Section";
 
 export function About() {
   return (
-    <Section id="about" index="01" label="About" title={<>Mechanical engineer turned <em>flight software</em> engineer.</>}>
+    <Section id="about" title="About">
       <Panel>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <img

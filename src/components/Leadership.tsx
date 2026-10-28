@@ -3,7 +3,7 @@ import { Panel, Section } from "./Section";
 
 export function Leadership() {
   return (
-    <Section id="leadership" index="06" label="Leadership & honors" title="Pulling others up with me.">
+    <Section id="leadership" title="Leadership & Honors">
       <div className="grid gap-5">
         <Panel>
           <ul className="divide-y divide-line">

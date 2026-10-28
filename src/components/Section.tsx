@@ -2,21 +2,17 @@ import type { ReactNode } from "react";
 import { motion } from "motion/react";
 
 /*
-  Every content section shares this frame: an id for the nav, a HUD-style
-  index label, and a reveal as it scrolls into view. Copy sits in the left
+  Every content section shares this frame: an id for the nav, a plain
+  heading, and a reveal as it scrolls into view. Copy sits in the left
   column on desktop so the jet keeps the right side of the screen.
 */
 export function Section({
   id,
-  index,
-  label,
   title,
   children,
   wide = false,
 }: {
   id: string;
-  index: string;
-  label: string;
   title: ReactNode;
   children: ReactNode;
   wide?: boolean;
@@ -29,12 +25,9 @@ export function Section({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10"
+          className="mb-8"
         >
-          <p className="font-mono text-xs tracking-[0.3em] text-hud uppercase">
-            {index} <span className="text-dim">/</span> {label}
-          </p>
-          <h2 className="mt-3 font-serif text-4xl leading-tight text-balance sm:text-5xl">{title}</h2>
+          <h2 className="font-serif text-4xl leading-tight text-balance sm:text-5xl">{title}</h2>
         </motion.header>
         {children}
       </div>

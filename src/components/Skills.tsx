@@ -3,7 +3,7 @@ import { Panel, Section } from "./Section";
 
 export function Skills() {
   return (
-    <Section id="skills" index="05" label="Loadout" title="The toolkit I fly with.">
+    <Section id="skills" title="Skills">
       <Panel>
         <dl className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
           {skills.map((g) => (

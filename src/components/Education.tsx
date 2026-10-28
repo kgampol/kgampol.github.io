@@ -4,7 +4,7 @@ import { Section } from "./Section";
 
 export function Education() {
   return (
-    <Section id="education" index="04" label="Education" title="Trained in two cockpits: machines and code.">
+    <Section id="education" title="Education">
       <ul className="grid gap-5 sm:grid-cols-2">
         {education.map((e, i) => (
           <motion.li

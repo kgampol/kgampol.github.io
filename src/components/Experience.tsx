@@ -67,7 +67,7 @@ function RoleCard({ role, i }: { role: Role; i: number }) {
 
 export function Experience() {
   return (
-    <Section id="experience" index="02" label="Flight log" title="Where I've flown.">
+    <Section id="experience" title="Experience">
       <ol className="relative space-y-8 border-l border-hud/25">
         {experience.map((role, i) => (
           <RoleCard key={`${role.org}-${role.title}`} role={role} i={i} />
