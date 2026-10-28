@@ -6,9 +6,21 @@ import { World } from "./World";
 import { altitudeAt, bindScroll, flight, stepFlight } from "./flight";
 
 /*
+  Layout the camera frames around. These mirror the content column in
+  components/Section.tsx (44rem wide, inset by px-4 / sm:px-8 / lg:px-16),
+  so the jet can be placed in the space that column leaves free.
+*/
+const CONTENT_MAX = 704;
+const GAP = 40;
+/** from this width there is room to fly the jet beside the copy */
+export const SIDE_LAYOUT_MIN = 1080;
+
+/*
   The camera rides alongside the jet. Altitude comes from the scroll
-  position; the horizontal framing comes from the viewport, so the jet
-  sits to the right of the copy on wide screens and above it on phones.
+  position; the horizontal framing comes from the viewport. On wide
+  screens the jet is centred in the free space right of the copy and
+  sized to fit it, so a wingtip never crosses the text. Narrower screens
+  put it above the copy instead.
 */
 function CameraRig() {
   const { camera, size } = useThree();
@@ -18,29 +30,38 @@ function CameraRig() {
     stepFlight(delta);
     const p = flight.progress;
     const alt = altitudeAt(p);
-    const aspect = size.width / size.height;
-    const wide = aspect > 1.05;
+    const w = size.width;
+    const aspect = w / size.height;
     const tanHalf = Math.tan(THREE.MathUtils.degToRad((camera as THREE.PerspectiveCamera).fov / 2));
 
-    // Distance chosen so the ~11-unit wingspan covers a set share of the
-    // screen width: about a third on desktop, a bit over half on a phone.
-    const share = wide ? 0.34 : 0.58;
-    const back = THREE.MathUtils.clamp(11 / (2 * share * tanHalf * aspect), 18, 60);
+    const pad = w >= 1024 ? 64 : w >= 640 ? 32 : 16;
+    const contentRight = Math.min(w, pad + CONTENT_MAX);
+    const side = w >= SIDE_LAYOUT_MIN;
+    const free = w - contentRight - GAP;
+
+    // Wingspan in pixels: most of the free column (capped at a third of
+    // the screen) beside the copy, or a bit over half the width above it.
+    // The ~11-unit wingspan then sets how far back the camera sits.
+    const spanPx = side ? Math.min(free * 0.85, w * 0.34) : w * 0.58;
+    const share = spanPx / w;
+    const back = THREE.MathUtils.clamp(11 / (2 * share * tanHalf * aspect), 18, 70);
     const halfW = tanHalf * back * aspect;
     const halfH = tanHalf * back;
 
-    // jet stays at the origin in x/z; the camera slides left so it reads right
-    const cx = wide ? -0.42 * halfW : 0;
+    // jet stays at the origin in x/z; the camera slides left so the jet
+    // lands on the chosen screen x
+    const centerPx = side ? contentRight + GAP + free / 2 : w / 2;
+    const cx = -((centerPx / w) * 2 - 1) * halfW;
     const above = THREE.MathUtils.lerp(4.2, 3.2, p);
     camera.position.set(cx, alt + above, back);
 
     // Aim at a point below the jet at its own depth, which lifts the jet
-    // above centre by that amount: a touch on desktop, up near the nav on
-    // phones so it clears the copy. Mid-dive, desktop tips down a little
-    // more so the clouds fill the frame, while phones ease the jet down
-    // so its tails never slide under the nav.
+    // above centre by that amount: a touch beside the copy, up near the
+    // nav when it flies above the copy. Mid-dive, the side layout tips down
+    // a little more so the clouds fill the frame, while the stacked layout
+    // eases the jet down so its tails never slide under the nav.
     const dive = Math.sin(p * Math.PI);
-    const lift = ((wide ? 0.06 : 0.68) + dive * (wide ? 0.12 : -0.08)) * halfH;
+    const lift = ((side ? 0.06 : 0.68) + dive * (side ? 0.12 : -0.08)) * halfH;
     look.set(cx, alt - lift, 0);
     camera.lookAt(look);
   });
@@ -69,8 +90,9 @@ export default function FlightScene() {
       </Canvas>
       {/* Darken the side the copy lives on so text stays readable over
           bright cloud and sunset without boxes behind it, while the jet's
-          side stays untouched. Phones darken everything below the jet. */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.78)_60%,rgb(5_7_13/0.15)_88%,transparent_100%)] md:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
+          side stays untouched. Below SIDE_LAYOUT_MIN, where the jet flies
+          above the copy, darken everything beneath it instead. */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.78)_60%,rgb(5_7_13/0.15)_88%,transparent_100%)] min-[1080px]:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
     </div>
   );
 }
