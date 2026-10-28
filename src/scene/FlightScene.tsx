@@ -68,8 +68,9 @@ export default function FlightScene() {
         <JetAtAltitude />
       </Canvas>
       {/* Darken the side the copy lives on so text stays readable over
-          bright cloud and sunset, while the jet's side stays untouched. */}
-      <div className="absolute inset-0 bg-gradient-to-t from-night/85 via-night/30 to-transparent md:bg-gradient-to-r md:from-night/80 md:via-night/35 md:to-transparent" />
+          bright cloud and sunset without boxes behind it, while the jet's
+          side stays untouched. Phones darken everything below the jet. */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.78)_60%,rgb(5_7_13/0.15)_88%,transparent_100%)] md:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
     </div>
   );
 }
