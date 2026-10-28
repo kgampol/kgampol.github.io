@@ -3,7 +3,7 @@ import { Panel, Section, Tag } from "./Section";
 
 export function Research() {
   return (
-    <Section id="research" index="03" label="Research & builds" title="Autonomy, reachability, and shipping in 24 hours.">
+    <Section id="research" title="Research">
       <div className="grid gap-5">
         {research.map((r) => (
           <Panel key={r.title}>

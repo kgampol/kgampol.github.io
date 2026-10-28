@@ -11,7 +11,7 @@ const channels = [
 export function Contact() {
   return (
     <>
-      <Section id="contact" index="07" label="Comms" title={<>Cleared to land. <em>Let's talk.</em></>}>
+      <Section id="contact" title="Contact">
         <p className="max-w-xl text-lg leading-relaxed text-ink/85">
           I'm interested in autonomy, defense technology, and AI systems that have to work the first time. If
           you're building something in that space, I'd like to hear about it.
