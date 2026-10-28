@@ -4,11 +4,11 @@ import { Reveal, Section } from "./Section";
 
 /** consecutive roles at the same company share one company header */
 function byCompany(roles: Role[]) {
-  const groups: { org: string; logo?: string; roles: Role[] }[] = [];
+  const groups: { org: string; logo?: string; mark?: string; roles: Role[] }[] = [];
   for (const r of roles) {
     const last = groups[groups.length - 1];
     if (last && last.org === r.org) last.roles.push(r);
-    else groups.push({ org: r.org, logo: r.logo, roles: [r] });
+    else groups.push({ org: r.org, logo: r.logo, mark: r.mark, roles: [r] });
   }
   return groups;
 }
@@ -20,7 +20,7 @@ export function Experience() {
         {byCompany(experience).map((g) => (
           <Reveal as="li" key={g.org}>
             <div className="flex items-center gap-4">
-              <Logo src={g.logo} name={g.org} />
+              <Logo src={g.logo} name={g.org} mark={g.mark} />
               <h3 className="text-lg font-medium">{g.org}</h3>
             </div>
 
