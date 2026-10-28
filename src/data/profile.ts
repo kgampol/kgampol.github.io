@@ -86,6 +86,8 @@ export type Role = {
   title: string;
   org: string;
   logo?: string;
+  /** initials for the tile when there is no logo file */
+  mark?: string;
   place: string;
   dates: string;
 };
@@ -117,6 +119,13 @@ export const experience: Role[] = [
     org: "Sun-Maid Growers of California",
     place: "Kingsburg, CA",
     dates: "Dec 2023 — Dec 2024",
+  },
+  {
+    title: "Research Assistant, Safe Trajectory Planning",
+    org: "USC Safety Intelligence & Autonomy Lab",
+    mark: "USC",
+    place: "Los Angeles, CA",
+    dates: "Apr 2024 — Aug 2024",
   },
 ];
 
