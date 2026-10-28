@@ -36,14 +36,11 @@ export const experience: Role[] = [
     place: "St. Louis, MO",
     dates: "Aug 2025 — Present",
     points: [
-      "Designed an agentic AI pipeline that automates C code generation for flight test, then pitched it to executive leadership and secured funding for full deployment.",
-      "Built a C# pre-mission validation pipeline that runs pilots' planned trajectories through a simulation harness and flags anomalies automatically, cutting mission-plan review from months to hours.",
-      "Engineered a BERT-based semantic verifier (PyTorch, HuggingFace) that scores LLM output against specs as an evaluation and guardrail layer.",
-      "Architected a zero-allocation C++ UDP multicast streaming library feeding an NVIDIA Thor platform running CUDA-accelerated computer vision at the edge.",
-      "Developed a static-memory C++ formation flight controller for autonomous aerial refueling under DO-178C deterministic constraints.",
-      "Built a TCP/UDP simulation backend for multi-ship Monte Carlo analysis in manned-unmanned teaming (MUM-T), and represent Boeing in working groups with the U.S. Navy on autonomy requirements.",
+      "Built an agentic AI pipeline that automates C code generation for flight test; pitched it to executive leadership and secured funding.",
+      "Built a pre-mission validation pipeline that cut mission-plan review from months to hours.",
+      "Develop real-time C++ systems for edge inference and autonomous aerial refueling under DO-178C constraints.",
     ],
-    tags: ["C++", "C#", "Python", "PyTorch", "CUDA", "Agentic AI", "DO-178C"],
+    tags: ["C++", "Python", "PyTorch", "CUDA"],
   },
   {
     title: "Flight Engineer Intern",
@@ -51,11 +48,8 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "St. Louis, MO",
     dates: "May 2025 — Aug 2025",
-    points: [
-      "Ran trade studies on advanced probe systems, balancing weight and manufacturability for next-generation aerial refueling platforms.",
-      "Built AI-augmented stress-analysis tools that plug into Boeing's standard methods to speed up design iterations.",
-    ],
-    tags: ["Trade Studies", "Aerial Refueling", "Python"],
+    points: ["Ran trade studies on advanced probe systems for next-generation aerial refueling platforms."],
+    tags: ["Trade Studies", "Python"],
   },
   {
     title: "Structural Stress Intern",
@@ -64,10 +58,9 @@ export const experience: Role[] = [
     place: "Long Beach, CA",
     dates: "May 2024 — May 2025",
     points: [
-      "Built an automated Python optimizer that ingests FEA load cases from HyperMesh, structures them in Pandas, and streams results over UDP to resize parts to the optimal margin of safety at minimum weight.",
-      "Retained to keep developing the tool for the 777-8F, and recognized as a Top 100 Intern in the Nation.",
+      "Built a Python FEA optimizer that resizes parts to minimum weight; retained for the 777-8F and named a Top 100 Intern in the Nation.",
     ],
-    tags: ["Python", "HyperMesh", "FEA", "Pandas", "UDP"],
+    tags: ["Python", "HyperMesh", "FEA"],
   },
   {
     title: "Automation & Systems Engineer",
@@ -75,10 +68,9 @@ export const experience: Role[] = [
     place: "Kingsburg, CA",
     dates: "Dec 2023 — Dec 2024",
     points: [
-      "Led a team that deployed a computer vision quality-control system with GPIO-driven air rejection, removing defective goods at full conveyor speed.",
-      "Projected $400K in labor savings over six years, started scaling to every packaging line, and earned Top Capstone Project.",
+      "Led deployment of a computer vision quality-control system at full line speed, projecting $400K in labor savings.",
     ],
-    tags: ["Computer Vision", "OpenCV", "Embedded", "Team Lead"],
+    tags: ["Computer Vision", "Embedded"],
   },
 ];
 
