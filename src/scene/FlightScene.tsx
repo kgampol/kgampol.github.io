@@ -16,6 +16,13 @@ const GAP = 40;
 export const SIDE_LAYOUT_MIN = 1080;
 
 /*
+  What the camera rig decided this frame, shared with the jet so the
+  intro sweep can be planned in screen terms: where the centre of the
+  screen is at the jet's depth, and how wide the view is there.
+*/
+const framing = { cx: 0, lift: 0, halfW: 20 };
+
+/*
   The camera rides alongside the jet. Altitude comes from the scroll
   position; the horizontal framing comes from the viewport. On wide
   screens the jet is centred in the free space right of the copy and
@@ -64,6 +71,9 @@ function CameraRig() {
     const lift = ((side ? 0.06 : 0.68) + dive * (side ? 0.12 : -0.08)) * halfH;
     look.set(cx, alt - lift, 0);
     camera.lookAt(look);
+    framing.cx = cx;
+    framing.lift = lift;
+    framing.halfW = halfW;
   });
 
   return null;
@@ -111,11 +121,51 @@ export default function FlightScene() {
   );
 }
 
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+
+/*
+  Places the jet for the current scroll position. During the intro it
+  enters from off-screen left at the height of the name (the centre of
+  the screen), flies across it nose-first, then banks into a turn that
+  swings its nose away from the viewer and lifts it into the spot the
+  descent starts from. After the intro it simply sits at altitude.
+*/
 function JetAtAltitude() {
-  const group = useMemo(() => new THREE.Group(), []);
+  const group = useMemo(() => {
+    const g = new THREE.Group();
+    g.rotation.order = "YXZ"; // yaw to the heading, then bank about the nose
+    return g;
+  }, []);
+
   useFrame(() => {
-    group.position.y = altitudeAt(flight.progress);
+    const t = flight.intro;
+    const alt = altitudeAt(flight.progress);
+    const { cx, lift, halfW } = framing;
+
+    // across: off-screen left -> final x, most of the travel up front so
+    // the jet is over the name early in the scroll
+    const startX = cx - halfW - 14;
+    const across = easeOut(THREE.MathUtils.clamp(t / 0.8, 0, 1));
+    // up: hold at the name's height while crossing, then climb to the
+    // descent framing
+    const rise = ease(THREE.MathUtils.smoothstep(t, 0.35, 1));
+    // closer to the camera while it crosses, so it reads large over the name
+    const near = Math.sin(Math.min(1, t / 0.9) * Math.PI) * 7;
+
+    group.position.set(
+      THREE.MathUtils.lerp(startX, 0, across),
+      THREE.MathUtils.lerp(alt - lift, alt, rise),
+      near,
+    );
+
+    // heading: nose pointing right (+x) on entry, turning to face away
+    // (-z) for the descent; bank into the turn and roll level at the end
+    const turn = ease(THREE.MathUtils.smoothstep(t, 0.25, 1));
+    group.rotation.y = -Math.PI / 2 * (1 - turn);
+    group.rotation.z = Math.sin(turn * Math.PI) * 0.75;
   });
+
   return (
     <primitive object={group}>
       <Jet />
