@@ -88,8 +88,6 @@ export type Role = {
   logo?: string;
   place: string;
   dates: string;
-  points: string[];
-  tags: string[];
 };
 
 export const experience: Role[] = [
@@ -99,12 +97,6 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "St. Louis, MO",
     dates: "Aug 2025 — Present",
-    points: [
-      "Built an agentic AI pipeline that automates C code generation for flight test; pitched it to executive leadership and secured funding.",
-      "Built a pre-mission validation pipeline that cut mission-plan review from months to hours.",
-      "Develop real-time C++ systems for edge inference and autonomous aerial refueling under DO-178C constraints.",
-    ],
-    tags: ["C++", "Python", "PyTorch", "CUDA"],
   },
   {
     title: "Flight Engineer Intern",
@@ -112,8 +104,6 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "St. Louis, MO",
     dates: "May 2025 — Aug 2025",
-    points: ["Ran trade studies on advanced probe systems for next-generation aerial refueling platforms."],
-    tags: ["Trade Studies", "Python"],
   },
   {
     title: "Structural Stress Intern",
@@ -121,20 +111,12 @@ export const experience: Role[] = [
     logo: "/img/boeing.png",
     place: "Long Beach, CA",
     dates: "May 2024 — May 2025",
-    points: [
-      "Built a Python FEA optimizer that resizes parts to minimum weight; retained for the 777-8F and named a Top 100 Intern in the Nation.",
-    ],
-    tags: ["Python", "HyperMesh", "FEA"],
   },
   {
     title: "Automation & Systems Engineer",
     org: "Sun-Maid Growers of California",
     place: "Kingsburg, CA",
     dates: "Dec 2023 — Dec 2024",
-    points: [
-      "Led deployment of a computer vision quality-control system at full line speed, projecting $400K in labor savings.",
-    ],
-    tags: ["Computer Vision", "Embedded"],
   },
 ];
 
