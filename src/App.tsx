@@ -4,6 +4,7 @@ import { Hero } from "./components/Hero";
 import { Hud } from "./components/Hud";
 import { About } from "./components/About";
 import { Experience } from "./components/Experience";
+import { Research } from "./components/Research";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Hero />
         <About />
         <Experience />
+        <Research />
         {/* scroll runway until the remaining sections land */}
         <div className="h-[400dvh]" />
       </main>
