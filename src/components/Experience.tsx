@@ -1,75 +1,54 @@
-import { motion } from "motion/react";
 import { experience, type Role } from "../data/profile";
-import { Section, Tag } from "./Section";
+import { Logo } from "./Logo";
+import { Reveal, Section } from "./Section";
 
-/** logos are dark-on-white artwork, so they sit on a light tile */
-export function LogoTile({ src, name }: { src?: string; name: string }) {
-  return (
-    <div className="grid size-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-white p-1.5 ring-1 ring-white/20">
-      {src ? (
-        <img src={src} alt={`${name} logo`} loading="lazy" className="size-full object-contain" />
-      ) : (
-        <span className="font-serif text-lg text-night">
-          {name
-            .split(/[\s-]+/)
-            .slice(0, 2)
-            .map((w) => w[0])
-            .join("")}
-        </span>
-      )}
-    </div>
-  );
-}
-
-function RoleCard({ role, i }: { role: Role; i: number }) {
-  return (
-    <motion.li
-      initial={{ opacity: 0, x: -16 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay: 0.05 * i, ease: [0.22, 1, 0.36, 1] }}
-      className="relative pl-8 sm:pl-10"
-    >
-      {/* waypoint on the timeline */}
-      <span
-        aria-hidden="true"
-        className="absolute top-7 left-0 size-[11px] -translate-x-1/2 rotate-45 border border-hud bg-night"
-      />
-      <article className="rounded-2xl border border-line bg-night/60 p-6 backdrop-blur-md sm:p-7">
-        <div className="flex items-start gap-4">
-          <LogoTile src={role.logo} name={role.org} />
-          <div className="min-w-0">
-            <h3 className="text-lg font-medium leading-snug">{role.title}</h3>
-            <p className="text-sm text-dim">
-              {role.org} · {role.place}
-            </p>
-          </div>
-        </div>
-        <p className="mt-4 font-mono text-xs tracking-wider text-dim">{role.dates}</p>
-        <ul className="mt-4 space-y-3 text-[15px] leading-relaxed text-ink/85">
-          {role.points.map((pt) => (
-            <li key={pt} className="relative pl-5">
-              <span aria-hidden="true" className="absolute top-[0.7em] left-0 h-px w-2.5 bg-hud/70" />
-              {pt}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-5 flex flex-wrap gap-2">
-          {role.tags.map((t) => (
-            <Tag key={t}>{t}</Tag>
-          ))}
-        </div>
-      </article>
-    </motion.li>
-  );
+/** consecutive roles at the same company share one company header */
+function byCompany(roles: Role[]) {
+  const groups: { org: string; logo?: string; roles: Role[] }[] = [];
+  for (const r of roles) {
+    const last = groups[groups.length - 1];
+    if (last && last.org === r.org) last.roles.push(r);
+    else groups.push({ org: r.org, logo: r.logo, roles: [r] });
+  }
+  return groups;
 }
 
 export function Experience() {
   return (
     <Section id="experience" title="Experience">
-      <ol className="relative space-y-8 border-l border-hud/25">
-        {experience.map((role, i) => (
-          <RoleCard key={`${role.org}-${role.title}`} role={role} i={i} />
+      <ol className="space-y-12">
+        {byCompany(experience).map((g) => (
+          <Reveal as="li" key={g.org}>
+            <div className="flex items-center gap-4">
+              <Logo src={g.logo} name={g.org} />
+              <h3 className="text-lg font-medium">{g.org}</h3>
+            </div>
+
+            {/* role timeline: a rail under the logo, one node per role */}
+            <ol className="mt-5 ml-5 space-y-8 border-l border-line pl-8">
+              {g.roles.map((r, i) => (
+                <li key={r.title} className="relative">
+                  <span
+                    aria-hidden="true"
+                    className={`absolute top-[0.45rem] -left-[2.32rem] size-2 rounded-full ring-4 ring-night ${
+                      i === 0 && r.dates.includes("Present") ? "bg-hud" : "bg-dim"
+                    }`}
+                  />
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                    <p className="font-medium text-ink">{r.title}</p>
+                    <p className="font-mono text-xs text-dim tabular-nums">{r.dates}</p>
+                  </div>
+                  <p className="mt-0.5 text-sm text-dim">{r.place}</p>
+                  <ul className="mt-3 space-y-2 text-[15px] leading-relaxed text-ink/80">
+                    {r.points.map((pt) => (
+                      <li key={pt}>{pt}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 font-mono text-[11px] tracking-wide text-hud/80">{r.tags.join("  ·  ")}</p>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
         ))}
       </ol>
     </Section>
