@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { CLOUD_BASE, CLOUD_TOP, CRUISE_ALT, FLOOR_ALT, reducedMotion } from "./flight";
+import { CLOUD_BASE, CLOUD_TOP, CRUISE_ALT, FLOOR_ALT, flight, reducedMotion } from "./flight";
 
 /*
   The world the jet descends through: a sky dome that runs from near-space
@@ -12,6 +12,17 @@ import { CLOUD_BASE, CLOUD_TOP, CRUISE_ALT, FLOOR_ALT, reducedMotion } from "./f
 */
 
 const GROUND_SPEED = 70; // world units per second the terrain slides past
+
+/**
+  The opening is a black screen with only the name and the jet. The world
+  fades up from black over the second half of the intro, once the jet has
+  crossed the name, so this is 0 at the top of the page and 1 after it.
+*/
+function reveal() {
+  return THREE.MathUtils.smoothstep(flight.intro, 0.45, 1);
+}
+
+const BLACK = new THREE.Color(0, 0, 0);
 
 /** 0 at cruise altitude, 1 on the deck */
 function lowness(altitude: number) {
@@ -45,6 +56,7 @@ function Sky() {
         fog: false,
         uniforms: {
           uLow: { value: 0 },
+          uReveal: { value: 0 },
           uZenith: { value: new THREE.Color() },
           uHorizon: { value: new THREE.Color() },
           uGlow: { value: C.glow.clone() },
@@ -58,6 +70,7 @@ function Sky() {
           }`,
         fragmentShader: /* glsl */ `
           uniform float uLow;
+          uniform float uReveal;
           uniform vec3 uZenith;
           uniform vec3 uHorizon;
           uniform vec3 uGlow;
@@ -75,7 +88,7 @@ function Sky() {
             col += uGlow * (pow(s, 900.0) * 3.0 + pow(s, 24.0) * 0.35) * uLow;
             // below the horizon, fade into the haze the ground sits in
             col = mix(col, uHorizon * 0.55, smoothstep(0.0, -0.25, h));
-            gl_FragColor = vec4(col, 1.0);
+            gl_FragColor = vec4(col * uReveal, 1.0);
           }`,
       }),
     [],
@@ -85,8 +98,10 @@ function Sky() {
   useFrame(({ camera }) => {
     const low = lowness(camera.position.y);
     mat.uniforms.uLow.value = low;
-    mat.uniforms.uZenith.value.copy(C.zenithHigh).lerp(C.zenithLow, low);
-    mat.uniforms.uHorizon.value.copy(C.horizonHigh).lerp(C.horizonLow, Math.pow(low, 1.6));
+    const r = reveal();
+    mat.uniforms.uReveal.value = r;
+    mat.uniforms.uZenith.value.copy(C.zenithHigh).lerp(C.zenithLow, low).lerp(BLACK, 1 - r);
+    mat.uniforms.uHorizon.value.copy(C.horizonHigh).lerp(C.horizonLow, Math.pow(low, 1.6)).lerp(BLACK, 1 - r);
     ref.current.position.copy(camera.position);
   });
 
@@ -151,7 +166,7 @@ function Stars({ count = 2600 }: { count?: number }) {
 
   useFrame(({ camera, clock, gl }) => {
     const low = lowness(camera.position.y);
-    mat.uniforms.uOpacity.value = THREE.MathUtils.clamp(1 - low * 1.35, 0, 1);
+    mat.uniforms.uOpacity.value = THREE.MathUtils.clamp(1 - low * 1.35, 0, 1) * reveal();
     mat.uniforms.uTime.value = reducedMotion ? 0 : clock.elapsedTime;
     mat.uniforms.uPixelRatio.value = gl.getPixelRatio();
     ref.current.position.copy(camera.position);
@@ -221,6 +236,7 @@ function Clouds({ count }: { count: number }) {
     const low = lowness(camera.position.y);
     // moonlit blue up high, warmed by the sunset underneath
     tint.set("#aab6d0").lerp(new THREE.Color("#e9b493"), Math.pow(low, 2));
+    const r = reveal();
     group.current.children.forEach((child, i) => {
       const p = puffs[i];
       // wrap each puff so the deck is endless along the flight path
@@ -230,7 +246,7 @@ function Clouds({ count }: { count: number }) {
       m.color.copy(tint);
       // thin out the puffs right in front of the lens so text stays legible
       const d = child.position.distanceTo(camera.position);
-      m.opacity = p.o * THREE.MathUtils.smoothstep(d, 40, 220);
+      m.opacity = p.o * THREE.MathUtils.smoothstep(d, 40, 220) * r;
     });
   });
 
@@ -254,6 +270,7 @@ function Ground() {
           uFog: { value: new THREE.Color() },
           uLow: { value: 0 },
           uTime: { value: 0 },
+          uReveal: { value: 0 },
         },
         vertexShader: /* glsl */ `
           varying vec3 vWorld;
@@ -268,6 +285,7 @@ function Ground() {
           uniform vec3 uFog;
           uniform float uLow;
           uniform float uTime;
+          uniform float uReveal;
           varying vec3 vWorld;
 
           float hash(vec2 p) {
@@ -333,7 +351,7 @@ function Ground() {
             float d = distance(vWorld, uCam);
             float f = 1.0 - exp(-d * mix(0.0012, 0.0016, uLow));
             col = mix(col, uFog, clamp(f, 0.0, 1.0));
-            gl_FragColor = vec4(col, 1.0);
+            gl_FragColor = vec4(col * uReveal, 1.0);
           }`,
       }),
     [],
@@ -347,6 +365,7 @@ function Ground() {
     const low = lowness(camera.position.y);
     mat.uniforms.uLow.value = low;
     mat.uniforms.uFog.value.copy(C.fogHigh).lerp(C.fogLow, Math.pow(low, 1.8));
+    mat.uniforms.uReveal.value = reveal();
     ref.current.position.set(camera.position.x, 0, camera.position.z - 2000);
   });
 
@@ -365,7 +384,7 @@ export function World({ lite }: { lite: boolean }) {
 
   useFrame(({ camera }) => {
     const low = lowness(camera.position.y);
-    fog.color.copy(C.fogHigh).lerp(C.fogLow, Math.pow(low, 1.8));
+    fog.color.copy(C.fogHigh).lerp(C.fogLow, Math.pow(low, 1.8)).lerp(BLACK, 1 - reveal());
     fog.near = THREE.MathUtils.lerp(400, 120, low);
     fog.far = THREE.MathUtils.lerp(3200, 1800, low);
     // cool moonlight up high, the sunset taking over near the ground
