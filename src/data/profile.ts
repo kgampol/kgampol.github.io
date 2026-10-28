@@ -7,7 +7,7 @@ export const profile = {
   org: "The Boeing Company",
   location: "St. Louis, MO",
   summary:
-    "AI/ML software engineer at Boeing in St. Louis, working on agentic AI, flight software, and autonomy. M.S. in Computer & Information Technology from Penn, B.S. in Mechanical Engineering from UC Merced.",
+    "AI/ML software engineer at Boeing in St. Louis, working on agentic AI, flight software, and autonomy. M.S. in Computer & Information Technology from UPenn, B.S. in Mechanical Engineering from UC Merced.",
   badges: ["US Citizen", "Active Secret Clearance", "Willing to Relocate"],
   email: "kgampol@alumni.upenn.edu",
   links: {
