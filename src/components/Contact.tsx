@@ -1,49 +1,51 @@
 import { profile } from "../data/profile";
-import { Section } from "./Section";
+import { Reveal, Section } from "./Section";
 
-const channels: { label: string; value: string; href: string; download?: boolean }[] = [
-  { label: "Email", value: profile.email, href: `mailto:${profile.email}` },
-  { label: "LinkedIn", value: "in/kennethgampol", href: profile.links.linkedin },
-  { label: "GitHub", value: "kgampol", href: profile.links.github },
-  { label: "Resume", value: "Download PDF", href: profile.links.resume, download: true },
+const links = [
+  { label: "LinkedIn", href: profile.links.linkedin, mark: "↗" },
+  { label: "GitHub", href: profile.links.github, mark: "↗" },
+  { label: "Resume", href: profile.links.resume, mark: "↓", download: true },
 ];
 
 export function Contact() {
   return (
     <>
       <Section id="contact" title="Contact">
-        <p className="max-w-xl text-lg leading-relaxed text-ink/85">
-          Open to conversations about AI/ML, autonomy, and defense technology.
-        </p>
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-          {channels.map((c) => {
-            const external = !c.href.startsWith("mailto:") && !c.download;
-            return (
-              <li key={c.label}>
+        <Reveal>
+          <p className="text-[15px] leading-relaxed text-ink/80">
+            Open to conversations about AI/ML, autonomy, and defense technology.
+          </p>
+          <a
+            href={`mailto:${profile.email}`}
+            className="mt-5 inline-block font-serif text-3xl break-all text-ink underline decoration-line decoration-1 underline-offset-[10px] transition-colors hover:text-hud hover:decoration-hud sm:text-4xl"
+          >
+            {profile.email}
+          </a>
+          <ul className="mt-8 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+            {links.map((l) => (
+              <li key={l.label}>
                 <a
-                  href={c.href}
-                  {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-                  {...(c.download ? { download: "Kenneth_Gampol_Resume.pdf" } : {})}
-                  className="group flex items-center justify-between rounded-2xl border border-line bg-night/60 px-5 py-4 backdrop-blur-md transition-colors hover:border-hud/60"
+                  href={l.href}
+                  {...(l.download
+                    ? { download: "Kenneth_Gampol_Resume.pdf" }
+                    : { target: "_blank", rel: "noreferrer" })}
+                  className="group inline-flex items-center gap-1.5 text-ink/85 transition-colors hover:text-hud"
                 >
-                  <span>
-                    <span className="block font-mono text-[10px] tracking-[0.3em] text-hud uppercase">{c.label}</span>
-                    <span className="mt-1 block text-ink/90">{c.value}</span>
-                  </span>
-                  <span aria-hidden="true" className="text-dim transition-transform group-hover:translate-x-1 group-hover:text-hud">
-                    →
+                  {l.label}
+                  <span aria-hidden="true" className="text-dim transition-colors group-hover:text-hud">
+                    {l.mark}
                   </span>
                 </a>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+        </Reveal>
       </Section>
 
-      <footer className="px-4 pt-10 pb-16 sm:px-8 lg:px-16">
-        <div className="flex max-w-2xl flex-col gap-2 border-t border-line pt-6 font-mono text-[11px] tracking-[0.2em] text-dim uppercase sm:flex-row sm:justify-between">
+      <footer className="px-4 pb-14 sm:px-8 lg:px-16">
+        <div className="flex max-w-[44rem] flex-col gap-2 border-t border-line pt-6 font-mono text-[11px] tracking-[0.18em] text-dim uppercase sm:flex-row sm:justify-between">
           <span>© {new Date().getFullYear()} {profile.name}</span>
-          <a href="#top" className="hover:text-hud">
+          <a href="#top" className="transition-colors hover:text-hud">
             Back to top ↑
           </a>
         </div>
