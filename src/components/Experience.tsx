@@ -39,8 +39,7 @@ function RoleCard({ role, i }: { role: Role; i: number }) {
         <div className="flex items-start gap-4">
           <LogoTile src={role.logo} name={role.org} />
           <div className="min-w-0">
-            <p className="font-mono text-[10px] tracking-[0.3em] text-hud uppercase">{role.callsign}</p>
-            <h3 className="mt-1 text-lg font-medium leading-snug">{role.title}</h3>
+            <h3 className="text-lg font-medium leading-snug">{role.title}</h3>
             <p className="text-sm text-dim">
               {role.org} · {role.place}
             </p>
