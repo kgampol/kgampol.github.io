@@ -54,26 +54,3 @@ export function Reveal({
     </Tag>
   );
 }
-
-/** a translucent panel that keeps copy legible over the moving sky */
-export function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className={`rounded-2xl border border-line bg-night/60 p-6 backdrop-blur-md sm:p-8 ${className}`}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-export function Tag({ children }: { children: ReactNode }) {
-  return (
-    <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[11px] tracking-wide text-dim">
-      {children}
-    </span>
-  );
-}
