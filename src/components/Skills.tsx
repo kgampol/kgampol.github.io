@@ -1,26 +1,19 @@
 import { skills } from "../data/profile";
-import { Panel, Section } from "./Section";
+import { Reveal, Section } from "./Section";
 
 export function Skills() {
   return (
     <Section id="skills" title="Skills">
-      <Panel>
-        <dl className="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+      <Reveal>
+        <dl className="divide-y divide-line">
           {skills.map((g) => (
-            <div key={g.group}>
-              <dt className="font-mono text-[10px] tracking-[0.3em] text-hud uppercase">{g.group}</dt>
-              <dd className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-[15px] text-ink/85">
-                {g.items.map((item, i) => (
-                  <span key={item}>
-                    {item}
-                    {i < g.items.length - 1 && <span className="ml-3 text-dim/50" aria-hidden="true">/</span>}
-                  </span>
-                ))}
-              </dd>
+            <div key={g.group} className="grid gap-1.5 py-4 first:pt-0 last:pb-0 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
+              <dt className="pt-0.5 font-mono text-[11px] tracking-[0.18em] text-dim uppercase">{g.group}</dt>
+              <dd className="text-[15px] leading-relaxed text-ink/85">{g.items.join(", ")}</dd>
             </div>
           ))}
         </dl>
-      </Panel>
+      </Reveal>
     </Section>
   );
 }
