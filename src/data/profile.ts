@@ -6,10 +6,8 @@ export const profile = {
   role: "AI/ML Software Engineer",
   org: "The Boeing Company",
   location: "St. Louis, MO",
-  summary: [
-    "I'm an AI/ML software engineer at Boeing in St. Louis, working where machine learning meets flight software: agentic code generation for flight test, real-time edge inference, and autonomous aerial refueling.",
-    "I started as a mechanical engineer, so I think in loads, margins, and failure modes. I bring that habit to software. Everything I ship has to be fast, deterministic, and safe enough to put on an aircraft.",
-  ],
+  summary:
+    "AI/ML software engineer at Boeing in St. Louis, working on agentic AI, flight software, and autonomy. M.S. in Computer & Information Technology from Penn, B.S. in Mechanical Engineering from UC Merced.",
   badges: ["US Citizen", "Active Secret Clearance", "Willing to Relocate"],
   email: "kgampol@alumni.upenn.edu",
   links: {
@@ -19,13 +17,6 @@ export const profile = {
   },
   photo: "/img/kenneth.jpg",
 } as const;
-
-export const stats = [
-  { value: "Months → hours", label: "Mission-plan review time after automated validation" },
-  { value: "$400K", label: "Projected labor savings from a computer vision line" },
-  { value: "~40%", label: "Token cost and latency cut in a RAG assistant" },
-  { value: "Top 100", label: "Intern in the nation, WayUp & Yello" },
-] as const;
 
 export type Role = {
   title: string;
