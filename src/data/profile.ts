@@ -117,13 +117,14 @@ export const experience: Role[] = [
   {
     title: "Automation & Systems Engineer",
     org: "Sun-Maid Growers of California",
+    logo: "/img/sunmaid.png",
     place: "Kingsburg, CA",
     dates: "Dec 2023 — Dec 2024",
   },
   {
     title: "Research Assistant, Safe Trajectory Planning",
     org: "USC Safety Intelligence & Autonomy Lab",
-    mark: "USC",
+    logo: "/img/usc.png",
     place: "Los Angeles, CA",
     dates: "Apr 2024 — Aug 2024",
   },
