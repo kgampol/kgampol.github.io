@@ -1,4 +1,4 @@
-import { experience, type Role } from "../data/profile";
+import { experience, profile, type Role } from "../data/profile";
 import { Logo } from "./Logo";
 import { Reveal, Section } from "./Section";
 
@@ -16,7 +16,7 @@ function byCompany(roles: Role[]) {
 export function Experience() {
   return (
     <Section id="experience" title="Experience">
-      <ol className="space-y-12">
+      <ol className="space-y-10">
         {byCompany(experience).map((g) => (
           <Reveal as="li" key={g.org}>
             <div className="flex items-center gap-4">
@@ -25,7 +25,7 @@ export function Experience() {
             </div>
 
             {/* role timeline: a rail under the logo, one node per role */}
-            <ol className="mt-5 ml-5 space-y-8 border-l border-line pl-8">
+            <ol className="mt-4 ml-5 space-y-5 border-l border-line pl-8">
               {g.roles.map((r, i) => (
                 <li key={r.title} className="relative">
                   <span
@@ -39,18 +39,20 @@ export function Experience() {
                     <p className="font-mono text-xs text-dim tabular-nums">{r.dates}</p>
                   </div>
                   <p className="mt-0.5 text-sm text-dim">{r.place}</p>
-                  <ul className="mt-3 space-y-2 text-[15px] leading-relaxed text-ink/80">
-                    {r.points.map((pt) => (
-                      <li key={pt}>{pt}</li>
-                    ))}
-                  </ul>
-                  <p className="mt-3 font-mono text-[11px] tracking-wide text-hud/80">{r.tags.join("  ·  ")}</p>
                 </li>
               ))}
             </ol>
           </Reveal>
         ))}
       </ol>
+      <a
+        href={profile.links.resume}
+        download="Kenneth_Gampol_Resume.pdf"
+        className="group mt-10 inline-flex items-center gap-1.5 text-sm text-ink/85 transition-colors hover:text-hud"
+      >
+        Full details in the resume
+        <span aria-hidden="true" className="text-dim transition-colors group-hover:text-hud">↓</span>
+      </a>
     </Section>
   );
 }
