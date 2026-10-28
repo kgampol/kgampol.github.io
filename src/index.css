@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-night: #05070d;
+  --color-ink: #e7ebf3;
+  --color-dim: #8a93a6;
+  --color-hud: #e8b04a;
+  --color-line: rgb(231 235 243 / 0.12);
+
+  --animate-scene-in: scene-in 1.4s ease-out both;
+  @keyframes scene-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+html {
+  background: var(--color-night);
+  color: var(--color-ink);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-hud);
+  color: var(--color-night);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
