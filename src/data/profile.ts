@@ -164,10 +164,10 @@ export const leadership = [
   { name: "AIAA, UC Merced", note: "Helped peers earn L1 high-power rocketry certifications" },
 ];
 
-export const honors = [
-  "Top 100 Intern in the Nation",
-  "Top Capstone Project",
-  "Boeing Community Leadership Recognition",
-  "Jack Kent Cooke Foundation Scholar",
-  "Frances M. Benton Scholarship",
+export const honors: { name: string; href?: string }[] = [
+  { name: "Top 100 Intern in the Nation", href: "https://www.nationalinternday.com/2024-top-100-interns" },
+  { name: "Top Capstone Project", href: "https://i2g.ucmerced.edu/" },
+  { name: "Pride@Boeing Community Leadership Recognition" },
+  { name: "Jack Kent Cooke Foundation Scholar" },
+  { name: "Frances M. Benton Scholarship" },
 ];
