@@ -1,5 +1,6 @@
 import FlightScene from "./scene/FlightScene";
 import { Nav } from "./components/Nav";
+import { Hero } from "./components/Hero";
 
 export default function App() {
   return (
@@ -7,11 +8,9 @@ export default function App() {
       <FlightScene />
       <Nav />
       <main id="top" className="relative">
-        {Array.from({ length: 6 }, (_, i) => (
-          <section key={i} className="grid min-h-dvh place-items-center">
-            <h1 className="font-serif text-6xl">Kenneth Gampol {i}</h1>
-          </section>
-        ))}
+        <Hero />
+        {/* scroll runway until the remaining sections land */}
+        <div className="h-[400dvh]" />
       </main>
     </>
   );
