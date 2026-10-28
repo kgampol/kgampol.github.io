@@ -17,6 +17,71 @@ export const profile = {
   },
 } as const;
 
+export type Project = {
+  title: string;
+  context: string;
+  dates: string;
+  summary: string;
+  points: string[];
+  tags: string[];
+  links?: { label: string; href: string }[];
+  /** a looping demo clip with a poster frame, plus an optional still */
+  media?: { video: string; poster: string; still?: string; alt: string };
+  /** for projects without footage, a headline result stands in for media */
+  stat?: { value: string; label: string };
+};
+
+export const projects: Project[] = [
+  {
+    title: "Autonomous RC Car",
+    context: "Personal project",
+    dates: "2024",
+    summary:
+      "An end-to-end self-driving car on a Raspberry Pi with LiDAR: it localizes itself, reads stop signs, and plans its own path around the track.",
+    points: [
+      "ROS 2 for communication and navigation, LiDAR SLAM for localization, a CNN for stop-sign detection, and on-device path planning.",
+      "Designed and 3D-printed custom mounts in SolidWorks; trained on simulation data from the Donkey Car platform.",
+      "Led directly to a research position at USC's Safety Intelligence & Autonomy Lab.",
+    ],
+    tags: ["Python", "ROS 2", "LiDAR", "SLAM", "TensorFlow", "SolidWorks"],
+    media: {
+      video: "/media/rc-car-demo.mp4",
+      poster: "/media/rc-car-demo-poster.jpg",
+      still: "/media/rc-car.jpg",
+      alt: "The autonomous RC car driving itself around a taped track",
+    },
+  },
+  {
+    title: "MasterMind AI",
+    context: "Wharton AI Hackathon · Top 10 Finalist",
+    dates: "Mar 2025",
+    summary:
+      "A study assistant that turns lecture PDFs, videos, and notes into summaries and adaptive quizzes, built by a team I led in 24 hours.",
+    points: [
+      "Retrieval-augmented generation with embedding-based similarity search, so answers stay grounded in the course material.",
+      "An adaptive quiz engine that classifies concepts and targets the ones you're weakest on.",
+      "A prompt orchestration and caching layer that cut token cost and latency by about 40%.",
+    ],
+    tags: ["Python", "RAG", "Vector DBs", "GPT-4"],
+    stat: { value: "24 hrs", label: "From idea to a working, pitched product" },
+  },
+  {
+    title: "Vision-Based Quality Control",
+    context: "Sun-Maid × UC Merced Capstone · Top Capstone Project",
+    dates: "2024",
+    summary:
+      "A computer vision system that spots defective packaged goods on a live production line and rejects them with air jets, at full conveyor speed.",
+    points: [
+      "Led the team from prototype to deployment on a running packaging line.",
+      "Camera-based detection driving GPIO-controlled air rejection, without slowing line throughput.",
+      "Projected $400K in labor savings over six years; scaling to every packaging line began.",
+    ],
+    tags: ["Computer Vision", "Embedded", "GPIO", "Team Lead"],
+    links: [{ label: "Innovate to Grow", href: "https://i2g.ucmerced.edu/" }],
+    stat: { value: "$400K", label: "Projected labor savings over six years" },
+  },
+];
+
 export type Role = {
   title: string;
   org: string;
@@ -120,7 +185,6 @@ export const skills: { group: string; items: string[] }[] = [
 
 export const leadership = [
   { name: "FIRST Robotics Volunteer", note: "Mentor youth teams as a Boeing representative" },
-  { name: "SHPE Boeing Chapter", note: "Mentorship and outreach for Hispanic/Latino engineers" },
   { name: "Boeing STL Leadership Association", note: "Leadership development across Boeing St. Louis" },
   { name: "Lead Teaching Assistant, UC Merced", note: "Two years lecturing math, physics, and engineering" },
   { name: "AIAA, UC Merced", note: "Helped peers earn L1 high-power rocketry certifications" },
@@ -129,7 +193,7 @@ export const leadership = [
 export const honors = [
   "Top 100 Intern in the Nation",
   "Top Capstone Project",
-  "Pride@Boeing Community Leadership Recognition",
+  "Boeing Community Leadership Recognition",
   "Jack Kent Cooke Foundation Scholar",
   "Frances M. Benton Scholarship",
 ];
