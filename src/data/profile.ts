@@ -129,17 +129,6 @@ export const experience: Role[] = [
   },
 ];
 
-export const research = [
-  {
-    title: "Safe Trajectory Planning",
-    org: "USC Safety Intelligence & Autonomy Lab",
-    place: "Los Angeles, CA",
-    dates: "Apr 2024 — Aug 2024",
-    body: "Real-time safe trajectory planning on an autonomous RC car using Hamilton-Jacobi reachability, with a LiDAR-to-actuation pipeline in ROS 2 on an NVIDIA Jetson.",
-    tags: ["ROS 2", "Hamilton-Jacobi", "LiDAR", "Jetson"],
-  },
-];
-
 export const education = [
   {
     school: "University of Pennsylvania",
