@@ -8,6 +8,7 @@ import { Research } from "./components/Research";
 import { Education } from "./components/Education";
 import { Skills } from "./components/Skills";
 import { Leadership } from "./components/Leadership";
+import { Contact } from "./components/Contact";
 
 export default function App() {
   return (
@@ -23,8 +24,7 @@ export default function App() {
         <Education />
         <Skills />
         <Leadership />
-        {/* scroll runway until the remaining sections land */}
-        <div className="h-[400dvh]" />
+        <Contact />
       </main>
     </>
   );
