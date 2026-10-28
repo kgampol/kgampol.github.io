@@ -83,11 +83,19 @@ export default function FlightScene() {
   const scrim = useRef<HTMLDivElement>(null);
   useEffect(() => bindScroll(), []);
 
-  // 0 on the hero, up to 0.6 once a screen has scrolled by
+  // The scrim stays off through the intro so it never dims the jet's
+  // sweep across the name, fading in over its last 40%. On phones the top
+  // band then darkens over the following screen, as content starts passing
+  // over the jet.
   useEffect(() => {
     const update = () => {
-      const t = Math.min(1, window.scrollY / window.innerHeight);
-      scrim.current?.style.setProperty("--scrim-top", (t * 0.6).toFixed(3));
+      const vh = window.innerHeight;
+      const intro = window.scrollY / vh;
+      const el = scrim.current;
+      if (!el) return;
+      el.style.opacity = Math.min(1, Math.max(0, (intro - 0.6) / 0.4)).toFixed(3);
+      const after = Math.min(1, Math.max(0, (window.scrollY - vh) / vh));
+      el.style.setProperty("--scrim-top", (after * 0.6).toFixed(3));
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
@@ -115,8 +123,8 @@ export default function FlightScene() {
           side stays untouched. Below SIDE_LAYOUT_MIN, where the jet flies
           above the copy, darken everything beneath it instead, and fade the
           top in as the hero scrolls away so copy passing over the jet stays
-          readable. */}
-      <div ref={scrim} className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.8)_60%,rgb(5_7_13/var(--scrim-top,0))_88%,rgb(5_7_13/var(--scrim-top,0))_100%)] min-[1080px]:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
+          readable. Starts hidden; the scroll handler above fades it in. */}
+      <div ref={scrim} style={{ opacity: 0 }} className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.8)_60%,rgb(5_7_13/var(--scrim-top,0))_88%,rgb(5_7_13/var(--scrim-top,0))_100%)] min-[1080px]:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
     </div>
   );
 }
