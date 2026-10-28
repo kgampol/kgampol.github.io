@@ -19,9 +19,21 @@ export function Leadership() {
         <h3 className="font-mono text-[11px] tracking-[0.18em] text-dim uppercase">Honors</h3>
         <ul className="mt-4 grid gap-x-8 gap-y-2 text-[15px] text-ink/85 sm:grid-cols-2">
           {honors.map((h) => (
-            <li key={h} className="flex gap-3">
+            <li key={h.name} className="flex gap-3">
               <span aria-hidden="true" className="mt-[0.6rem] h-px w-3 shrink-0 bg-hud" />
-              {h}
+              {h.href ? (
+                <a
+                  href={h.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group underline decoration-line underline-offset-4 transition-colors hover:text-hud hover:decoration-hud"
+                >
+                  {h.name}
+                  <span aria-hidden="true" className="ml-1 text-dim no-underline group-hover:text-hud">↗</span>
+                </a>
+              ) : (
+                h.name
+              )}
             </li>
           ))}
         </ul>
