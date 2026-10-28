@@ -24,10 +24,10 @@ export function Hero() {
 
         <motion.div {...rise(0.45)} className="mt-9 flex flex-wrap gap-3">
           <a
-            href="#experience"
+            href="#projects"
             className="rounded-full bg-hud px-6 py-3 text-sm font-medium text-night transition-transform hover:-translate-y-0.5"
           >
-            View experience
+            View projects
           </a>
           <a
             href={profile.links.resume}
