@@ -13,7 +13,11 @@ const damp = (x: number, y: number, lambda: number, dt: number) =>
   render, so scrolling never re-renders the page.
 */
 export const flight = {
-  /** raw scroll position, 0 at the top of the page and 1 at the bottom */
+  /** raw intro position: 0 at the top, 1 after one screen of scrolling */
+  introTarget: 0,
+  /** eased copy of introTarget, which drives the jet's sweep across the name */
+  intro: 0,
+  /** raw descent position: 0 once the intro is done, 1 at the bottom */
   target: 0,
   /** eased copy of target, what everything actually animates from */
   progress: 0,
@@ -25,10 +29,17 @@ export const reducedMotion =
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/*
+  The first screen of scrolling belongs to the intro; it matches the
+  extra screen of height the hero is given (h-[200dvh] with a pinned
+  name). The descent uses whatever scroll is left after that.
+*/
 export function bindScroll() {
   const update = () => {
+    const intro = window.innerHeight;
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    flight.target = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
+    flight.introTarget = clamp(window.scrollY / intro, 0, 1);
+    flight.target = max > intro ? clamp((window.scrollY - intro) / (max - intro), 0, 1) : 0;
   };
   update();
   window.addEventListener("scroll", update, { passive: true });
@@ -40,6 +51,7 @@ export function bindScroll() {
 }
 
 export function stepFlight(delta: number) {
+  flight.intro = reducedMotion ? flight.introTarget : damp(flight.intro, flight.introTarget, 4, delta);
   const before = flight.progress;
   flight.progress = reducedMotion
     ? flight.target
