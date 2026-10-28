@@ -65,6 +65,9 @@ export default function FlightScene() {
         <World lite={lite} />
         <JetAtAltitude />
       </Canvas>
+      {/* Darken the side the copy lives on so text stays readable over
+          bright cloud and sunset, while the jet's side stays untouched. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-night/85 via-night/30 to-transparent md:bg-gradient-to-r md:from-night/80 md:via-night/35 md:to-transparent" />
     </div>
   );
 }
