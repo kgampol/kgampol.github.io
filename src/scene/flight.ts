@@ -1,4 +1,10 @@
-import { MathUtils } from "three";
+// Tiny maths helpers kept local so the HUD can import this module without
+// pulling three.js into the main bundle; the 3D scene is loaded lazily.
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+/** frame-rate independent exponential smoothing (same formula as three's damp) */
+const damp = (x: number, y: number, lambda: number, dt: number) =>
+  lerp(x, y, 1 - Math.exp(-lambda * dt));
 
 /*
   One shared flight state. The DOM writes the raw scroll target, the
@@ -22,7 +28,7 @@ export const reducedMotion =
 export function bindScroll() {
   const update = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    flight.target = max > 0 ? MathUtils.clamp(window.scrollY / max, 0, 1) : 0;
+    flight.target = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
   };
   update();
   window.addEventListener("scroll", update, { passive: true });
@@ -37,9 +43,9 @@ export function stepFlight(delta: number) {
   const before = flight.progress;
   flight.progress = reducedMotion
     ? flight.target
-    : MathUtils.damp(flight.progress, flight.target, 3.2, delta);
+    : damp(flight.progress, flight.target, 3.2, delta);
   const v = delta > 0 ? (flight.progress - before) / delta : 0;
-  flight.velocity = MathUtils.damp(flight.velocity, v, 6, delta);
+  flight.velocity = damp(flight.velocity, v, 6, delta);
 }
 
 /* --- the descent profile, shared by the camera and the HUD --- */
@@ -52,7 +58,7 @@ export const CLOUD_TOP = 330;
 /** altitude in world units. Eased so the dive is steepest mid-page. */
 export function altitudeAt(p: number) {
   const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-  return MathUtils.lerp(CRUISE_ALT, FLOOR_ALT, e);
+  return lerp(CRUISE_ALT, FLOOR_ALT, e);
 }
 
 /** altitude in feet, for the HUD readout */
