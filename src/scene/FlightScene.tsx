@@ -84,7 +84,9 @@ export default function FlightScene() {
   useEffect(() => bindScroll(), []);
 
   // The scrim stays off through the intro so it never dims the jet's
-  // sweep across the name, fading in over its last 40%. On phones the top
+  // sweep across the name or its climb through the middle of a phone
+  // screen. It fades in from 90% of the intro to 20% past it, when the
+  // jet is parked at the side (desktop) or the top (phones). On phones the top
   // band then darkens over the following screen, as content starts passing
   // over the jet.
   useEffect(() => {
@@ -93,7 +95,7 @@ export default function FlightScene() {
       const intro = window.scrollY / vh;
       const el = scrim.current;
       if (!el) return;
-      el.style.opacity = Math.min(1, Math.max(0, (intro - 0.6) / 0.4)).toFixed(3);
+      el.style.opacity = Math.min(1, Math.max(0, (intro - 0.9) / 0.3)).toFixed(3);
       const after = Math.min(1, Math.max(0, (window.scrollY - vh) / vh));
       el.style.setProperty("--scrim-top", (after * 0.6).toFixed(3));
     };
