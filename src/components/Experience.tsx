@@ -25,12 +25,12 @@ export function Experience() {
             </div>
 
             {/* role timeline: a rail under the logo, one node per role */}
-            <ol className="mt-4 ml-5 space-y-5 border-l border-line pl-8">
+            <ol className="mt-4 ml-[21.5px] space-y-5 border-l border-line pl-8">
               {g.roles.map((r, i) => (
                 <li key={r.title} className="relative">
                   <span
                     aria-hidden="true"
-                    className={`absolute top-[0.45rem] -left-[2.32rem] size-2 rounded-full ring-4 ring-night ${
+                    className={`absolute top-[0.45rem] -left-[36.5px] size-2 rounded-full ring-4 ring-night ${
                       i === 0 && r.dates.includes("Present") ? "bg-hud" : "bg-dim"
                     }`}
                   />
