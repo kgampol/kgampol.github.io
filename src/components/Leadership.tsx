@@ -16,16 +16,8 @@ export function Leadership() {
           </ul>
         </Panel>
 
-        <div className="flex flex-col gap-5 sm:flex-row">
-          <img
-            src="/img/top100.jpg"
-            alt="Top 100 Interns in the Nation award graphic"
-            width={600}
-            height={600}
-            loading="lazy"
-            className="aspect-square w-full rounded-2xl object-cover ring-1 ring-line sm:w-44"
-          />
-          <Panel className="flex-1">
+        <div>
+          <Panel>
             <p className="font-mono text-[10px] tracking-[0.3em] text-hud uppercase">Honors</p>
             <ul className="mt-4 space-y-2.5">
               {honors.map((h) => (
