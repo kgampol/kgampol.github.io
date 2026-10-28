@@ -10,19 +10,28 @@ const links = [
 
 export function Nav() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [shown, setShown] = useState(false);
 
+  // The opening is just the name: the nav stays out of the way until the
+  // jet's sweep across it is nearly done (most of the first screen).
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setShown(window.scrollY > window.innerHeight * 0.85);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
+
+  const visible = shown || open;
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled || open ? "border-b border-line bg-night/70 backdrop-blur-md" : ""
+      inert={!visible}
+      className={`fixed inset-x-0 top-0 z-50 border-b border-line bg-night/70 backdrop-blur-md transition-[opacity,translate] duration-500 ${
+        visible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
       }`}
     >
       <nav className="flex h-16 items-center justify-between px-4 sm:px-8 lg:px-16" aria-label="Primary">
