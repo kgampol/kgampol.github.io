@@ -70,7 +70,7 @@ function Sky() {
             float band = exp(-abs(h) * 14.0);
             col += uGlow * band * (0.08 + 0.55 * uLow);
             // a setting sun ahead and slightly right
-            vec3 sunDir = normalize(vec3(0.35, 0.035, -1.0));
+            vec3 sunDir = normalize(vec3(0.62, 0.035, -1.0));
             float s = max(dot(d, sunDir), 0.0);
             col += uGlow * (pow(s, 900.0) * 3.0 + pow(s, 24.0) * 0.35) * uLow;
             // below the horizon, fade into the haze the ground sits in
