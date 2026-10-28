@@ -88,6 +88,8 @@ export type Role = {
   logo?: string;
   /** initials for the tile when there is no logo file */
   mark?: string;
+  /** a short line under the company name, e.g. where a lab has moved */
+  orgNote?: string;
   place: string;
   dates: string;
 };
@@ -123,7 +125,8 @@ export const experience: Role[] = [
   },
   {
     title: "Research Assistant, Safe Trajectory Planning",
-    org: "USC Safety Intelligence & Autonomy Lab",
+    org: "Safety Intelligence & Autonomy Lab",
+    orgNote: "USC at the time · now at Stanford",
     logo: "/img/usc.png",
     place: "Los Angeles, CA",
     dates: "Apr 2024 — Aug 2024",
