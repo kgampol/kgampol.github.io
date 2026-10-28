@@ -15,7 +15,6 @@ export const profile = {
     github: "https://github.com/kgampol",
     resume: "/docs/Kenneth_Gampol_Resume.pdf",
   },
-  photo: "/img/kenneth.jpg",
 } as const;
 
 export type Role = {
