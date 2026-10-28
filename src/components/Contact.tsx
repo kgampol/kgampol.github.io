@@ -10,11 +10,8 @@ const links = [
 export function Contact() {
   return (
     <>
-      <Section id="contact" title="Contact">
+      <Section id="contact" title="Contact Me">
         <Reveal>
-          <p className="text-[15px] leading-relaxed text-ink/80">
-            Open to conversations about AI/ML, autonomy, and defense technology.
-          </p>
           <a
             href={`mailto:${profile.email}`}
             className="mt-5 inline-block font-serif text-3xl break-all text-ink underline decoration-line decoration-1 underline-offset-[10px] transition-colors hover:text-hud hover:decoration-hud sm:text-4xl"
