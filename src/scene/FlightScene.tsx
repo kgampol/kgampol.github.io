@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Jet } from "./Jet";
@@ -70,7 +70,19 @@ function CameraRig() {
 }
 
 export default function FlightScene() {
+  const scrim = useRef<HTMLDivElement>(null);
   useEffect(() => bindScroll(), []);
+
+  // 0 on the hero, up to 0.6 once a screen has scrolled by
+  useEffect(() => {
+    const update = () => {
+      const t = Math.min(1, window.scrollY / window.innerHeight);
+      scrim.current?.style.setProperty("--scrim-top", (t * 0.6).toFixed(3));
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
   const lite = typeof window !== "undefined" && window.innerWidth < 768;
 
   return (
@@ -91,8 +103,10 @@ export default function FlightScene() {
       {/* Darken the side the copy lives on so text stays readable over
           bright cloud and sunset without boxes behind it, while the jet's
           side stays untouched. Below SIDE_LAYOUT_MIN, where the jet flies
-          above the copy, darken everything beneath it instead. */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.78)_60%,rgb(5_7_13/0.15)_88%,transparent_100%)] min-[1080px]:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
+          above the copy, darken everything beneath it instead, and fade the
+          top in as the hero scrolls away so copy passing over the jet stays
+          readable. */}
+      <div ref={scrim} className="absolute inset-0 bg-[linear-gradient(to_top,rgb(5_7_13/0.9)_0%,rgb(5_7_13/0.8)_60%,rgb(5_7_13/var(--scrim-top,0))_88%,rgb(5_7_13/var(--scrim-top,0))_100%)] min-[1080px]:bg-[linear-gradient(to_right,rgb(5_7_13/0.92)_0%,rgb(5_7_13/0.82)_38%,rgb(5_7_13/0.4)_58%,transparent_74%)]" />
     </div>
   );
 }
