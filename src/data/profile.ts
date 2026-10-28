@@ -80,7 +80,7 @@ export const research = [
     org: "USC Safety Intelligence & Autonomy Lab",
     place: "Los Angeles, CA",
     dates: "Apr 2024 — Aug 2024",
-    body: "Implemented real-time safe trajectory planning on an autonomous RC car using Hamilton-Jacobi reachability on an NVIDIA Jetson, with a full LiDAR-to-actuation pipeline in ROS 2. I got the position by cold-contacting the lab with a self-built SLAM car.",
+    body: "Real-time safe trajectory planning on an autonomous RC car using Hamilton-Jacobi reachability, with a LiDAR-to-actuation pipeline in ROS 2 on an NVIDIA Jetson.",
     tags: ["ROS 2", "Hamilton-Jacobi", "LiDAR", "Jetson"],
   },
   {
@@ -88,7 +88,7 @@ export const research = [
     org: "Wharton AI Hackathon — Top 10 Finalist",
     place: "Philadelphia, PA",
     dates: "Mar 2025",
-    body: "Led a team that shipped a full-stack RAG study assistant in 24 hours. It turns lecture PDFs, videos, and notes into adaptive quizzes that target weak concepts, with a caching layer that cut token cost and latency by about 40%.",
+    body: "Led a team that built a RAG study assistant in 24 hours, turning lecture material into adaptive quizzes.",
     tags: ["RAG", "VectorDBs", "GPT-4", "Team Lead"],
   },
 ];
