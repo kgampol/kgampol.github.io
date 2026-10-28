@@ -53,7 +53,7 @@ export default function FlightScene() {
   const lite = typeof window !== "undefined" && window.innerWidth < 768;
 
   return (
-    <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden="true">
+    <div className="animate-scene-in pointer-events-none fixed inset-0 -z-10" aria-hidden="true">
       <Canvas
         dpr={[1, lite ? 1.5 : 2]}
         camera={{ fov: 40, near: 0.5, far: 9000, position: [0, altitudeAt(0) + 4, 21] }}

@@ -10,6 +10,12 @@
   --color-dim: #8a93a6;
   --color-hud: #e8b04a;
   --color-line: rgb(231 235 243 / 0.12);
+
+  --animate-scene-in: scene-in 1.4s ease-out both;
+  @keyframes scene-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 }
 
 html {
