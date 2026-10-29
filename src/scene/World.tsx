@@ -256,6 +256,18 @@ function Stars({ count = 2600 }: { count?: number }) {
   return <points ref={ref} geometry={geo} material={mat} renderOrder={-9} frustumCulled={false} />;
 }
 
+/*
+  The cloud sprites were tuned when blending happened in display (sRGB)
+  space. The post-processing chain blends in linear light instead, which
+  makes thin, low-alpha cloud read about twice as bright once encoded,
+  so the soft puffs turned into brighter, harder-edged shapes. Raising
+  alpha to a power (texture and per-sprite opacity alike) pulls the
+  thin outskirts back down. The exact display-space equivalent, 2.2,
+  overcorrected (tone mapping moved too), so 1.6 was matched by eye
+  against the original frames.
+*/
+const CLOUD_ALPHA_GAMMA = 1.6;
+
 function cloudTexture() {
   const size = 128;
   const c = document.createElement("canvas");
@@ -272,6 +284,12 @@ function cloudTexture() {
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, size, size);
   }
+  // Display-space alpha -> linear-space alpha (see CLOUD_ALPHA_GAMMA).
+  const img = ctx.getImageData(0, 0, size, size);
+  for (let i = 3; i < img.data.length; i += 4) {
+    img.data[i] = Math.round(255 * Math.pow(img.data[i] / 255, CLOUD_ALPHA_GAMMA));
+  }
+  ctx.putImageData(img, 0, 0);
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
   return t;
@@ -327,7 +345,7 @@ function Clouds({ count }: { count: number }) {
       m.color.copy(tint);
       // thin out the puffs right in front of the lens so text stays legible
       const d = child.position.distanceTo(camera.position);
-      m.opacity = p.o * THREE.MathUtils.smoothstep(d, 40, 220) * r;
+      m.opacity = Math.pow(p.o * THREE.MathUtils.smoothstep(d, 40, 220) * r, CLOUD_ALPHA_GAMMA);
     });
   });
 
