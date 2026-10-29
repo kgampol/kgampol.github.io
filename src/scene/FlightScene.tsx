@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { Bloom, EffectComposer, Noise, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { BlendFunction, ToneMappingMode } from "postprocessing";
 import { Jet } from "./Jet";
 import { World } from "./World";
 import { altitudeAt, bindScroll, flight, stepFlight } from "./flight";
@@ -112,13 +114,15 @@ export default function FlightScene() {
         camera={{ fov: 40, near: 0.5, far: 9000, position: [0, altitudeAt(0) + 4, 21] }}
         gl={{ antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl }) => {
-          gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.05;
+          // tone mapping happens in the post chain instead, so bloom sees
+          // the scene's full HDR range (sun disc, afterburners, city lights)
+          gl.toneMapping = THREE.NoToneMapping;
         }}
       >
         <CameraRig />
         <World lite={lite} />
         <JetAtAltitude />
+        <Grade lite={lite} />
       </Canvas>
       {/* Darken the side the copy lives on so text stays readable over
           bright cloud and sunset without boxes behind it, while the jet's
@@ -180,5 +184,33 @@ function JetAtAltitude() {
     <primitive object={group}>
       <Jet />
     </primitive>
+  );
+}
+
+/*
+  The finishing pass. Bloom only picks up what is genuinely brighter than
+  white in HDR (sun disc, afterburner cores, runway and city lights), so
+  the copy-side of the frame and the dark sky stay clean. ACES tone
+  mapping runs here rather than on the renderer, then a soft vignette
+  and very light film grain. Phones skip the grain to save fill rate.
+
+  No anti-aliasing pass, on purpose:
+  - MSAA is off because with an MSAA framebuffer the mipmap bloom pass
+    rendered a solid black frame (no GL error) on Apple GPUs via
+    ANGLE/Metal.
+  - FXAA traced the soft gradients of the cloud sprites as edges, drawing
+    faint rings around them. SMAA would avoid that but embeds lookup
+    textures worth ~58 KB gzipped.
+  On high-DPI screens (rendered at up to 2x) the jet's edges barely
+  alias; standard 1x screens see slightly harder edges on the jet.
+*/
+function Grade({ lite }: { lite: boolean }) {
+  return (
+    <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
+      <Bloom mipmapBlur intensity={0.9} luminanceThreshold={1} luminanceSmoothing={0.2} radius={0.7} />
+      <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+      <Vignette offset={0.32} darkness={0.55} />
+      {!lite && <Noise opacity={0.035} premultiply blendFunction={BlendFunction.SCREEN} />}
+    </EffectComposer>
   );
 }
