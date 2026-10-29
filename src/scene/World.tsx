@@ -73,15 +73,35 @@ function makeSky() {
   mat.fog = false;
   mat.uniforms.uReveal = { value: 0 };
   mat.uniforms.uExposure = { value: 1 };
+  mat.uniforms.uBand = { value: 0 };
+  // the old hand-tuned sunset's amber, in linear light
+  mat.uniforms.uBandColor = { value: new THREE.Color("#ff5a1e") };
   mat.fragmentShader = mat.fragmentShader
-    .replace("uniform float time;", "uniform float time;\nuniform float uReveal;\nuniform float uExposure;")
+    .replace(
+      "uniform float time;",
+      "uniform float time;\nuniform float uReveal;\nuniform float uExposure;\nuniform float uBand;\nuniform vec3 uBandColor;",
+    )
+    // Physically based scattering gives a realistic but muted dusk, so the
+    // old gradient sky's bold amber band is layered back on: tight around
+    // the horizon, strongest on the sun's side, with a broad warm halo
+    // toward the sun. uBand scales it with altitude (faint up high, full on
+    // approach). Added after exposure so it keeps its intended strength.
+    .replace(
+      "gl_FragColor = vec4( texColor, 1.0 );",
+      `float bandH = exp( -abs( direction.y ) * 13.0 );
+      vec2 toSun = normalize( vSunDirection.xz );
+      float sunSide = 0.45 + 0.55 * max( dot( normalize( direction.xz + 1e-5 ), toSun ), 0.0 );
+      float halo = pow( max( dot( direction, vSunDirection ), 0.0 ), 12.0 );
+      vec3 band = uBandColor * uBand * ( bandH * sunSide + halo * 0.35 ) * step( -0.02, direction.y );
+      gl_FragColor = vec4( texColor, 1.0 );`,
+    )
     // The sun disc reaches ~6e4 per channel, close to the 65504 ceiling of
     // the half-float buffers the post chain renders into. Cap it at 64,
     // still far above white so the sun blooms, to keep headroom for the
     // bloom pass's filtering.
     .replace(
       "gl_FragColor = vec4( texColor, 1.0 );",
-      "gl_FragColor = vec4( min( texColor * uExposure, vec3( 64.0 ) ) * uReveal, 1.0 );",
+      "gl_FragColor = vec4( min( texColor * uExposure + band, vec3( 64.0 ) ) * uReveal, 1.0 );",
     );
   const u = mat.uniforms;
   // hazier, more scattering air than the clear-day defaults, which
@@ -104,7 +124,9 @@ function updateSky(sky: THREE.Mesh, low: number, r: number, sun: THREE.Vector3, 
   u.uReveal.value = r;
   // Preetham output is HDR; hold the exposure down near the sun-lit
   // horizon so the sunset stays saturated after tone mapping
-  u.uExposure.value = THREE.MathUtils.lerp(0.9, 0.42, low);
+  u.uExposure.value = THREE.MathUtils.lerp(0.9, 0.32, low);
+  // horizon band: a hint of warmth at cruise, full strength on approach
+  u.uBand.value = THREE.MathUtils.lerp(0.04, 1.5, Math.pow(low, 1.3));
 }
 
 function Sky() {
