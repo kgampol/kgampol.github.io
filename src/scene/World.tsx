@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Sky as ThreeSky } from "three/addons/objects/Sky.js";
@@ -117,6 +117,51 @@ function Sky() {
   });
 
   return <primitive object={sky} />;
+}
+
+/*
+  Reflections: a second, cloudless copy of the sky is rendered into a
+  prefiltered environment map (PMREM) and set as scene.environment, so
+  the jet's metal and canopy pick up the twilight blue at altitude and
+  the sunset on approach. Re-baking costs a few cube renders, so it only
+  happens when altitude or the opening reveal has moved noticeably.
+*/
+function SkyReflections() {
+  const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
+  const probe = useMemo(() => {
+    const envScene = new THREE.Scene();
+    const sky = makeSky();
+    sky.scale.setScalar(10);
+    envScene.add(sky);
+    return { envScene, sky, pmrem: new THREE.PMREMGenerator(gl), sun: new THREE.Vector3() };
+  }, [gl]);
+  const last = useRef({ low: -1, r: -1, target: null as THREE.WebGLRenderTarget | null });
+
+  useEffect(
+    () => () => {
+      last.current.target?.dispose();
+      probe.pmrem.dispose();
+      scene.environment = null;
+    },
+    [probe, scene],
+  );
+
+  useFrame(({ camera }) => {
+    const low = lowness(camera.position.y);
+    const r = reveal();
+    const prev = last.current;
+    if (Math.abs(low - prev.low) < 0.015 && Math.abs(r - prev.r) < 0.05) return;
+    sunDirection(low, probe.sun);
+    updateSky(probe.sky, low, r, probe.sun, 0);
+    const target = probe.pmrem.fromScene(probe.envScene, 0, 0.1, 100);
+    prev.target?.dispose();
+    scene.environment = target.texture;
+    scene.environmentIntensity = 0.9;
+    last.current = { low, r, target };
+  });
+
+  return null;
 }
 
 function Stars({ count = 2600 }: { count?: number }) {
@@ -413,6 +458,7 @@ export function World({ lite }: { lite: boolean }) {
       {/* rim from the sun ahead, so the silhouette catches warm light */}
       <directionalLight ref={rim} position={[4, 1.5, -12]} color="#ffb06a" intensity={1.2} />
       <Sky />
+      <SkyReflections />
       <Stars count={lite ? 1400 : 2600} />
       <Clouds count={lite ? 26 : 48} />
       <Ground />
