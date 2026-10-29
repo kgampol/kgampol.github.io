@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { Sky as ThreeSky } from "three/addons/objects/Sky.js";
 import { CLOUD_BASE, CLOUD_TOP, CRUISE_ALT, FLOOR_ALT, flight, reducedMotion } from "./flight";
 
 /*
@@ -30,11 +31,6 @@ function lowness(altitude: number) {
 }
 
 const C = {
-  zenithHigh: new THREE.Color("#020309"),
-  horizonHigh: new THREE.Color("#0e1a36"),
-  zenithLow: new THREE.Color("#0b1734"),
-  horizonLow: new THREE.Color("#d9824c"),
-  glow: new THREE.Color("#ffb56b"),
   fogHigh: new THREE.Color("#0b1530"),
   fogLow: new THREE.Color("#8c5a4a"),
 };
@@ -47,69 +43,80 @@ export function useAtmosphere() {
   return fog;
 }
 
-function Sky() {
-  const mat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        side: THREE.BackSide,
-        depthWrite: false,
-        fog: false,
-        uniforms: {
-          uLow: { value: 0 },
-          uReveal: { value: 0 },
-          uZenith: { value: new THREE.Color() },
-          uHorizon: { value: new THREE.Color() },
-          uGlow: { value: C.glow.clone() },
-        },
-        vertexShader: /* glsl */ `
-          varying vec3 vDir;
-          void main() {
-            vDir = normalize(position);
-            vec4 p = modelViewMatrix * vec4(position, 1.0);
-            gl_Position = projectionMatrix * p;
-          }`,
-        fragmentShader: /* glsl */ `
-          uniform float uLow;
-          uniform float uReveal;
-          uniform vec3 uZenith;
-          uniform vec3 uHorizon;
-          uniform vec3 uGlow;
-          varying vec3 vDir;
-          void main() {
-            vec3 d = normalize(vDir);
-            float h = d.y;
-            vec3 col = mix(uHorizon, uZenith, smoothstep(-0.05, 0.55, h));
-            // warm band hugging the horizon, strongest low down
-            float band = exp(-abs(h) * 14.0);
-            col += uGlow * band * (0.08 + 0.55 * uLow);
-            // a setting sun ahead and slightly right
-            vec3 sunDir = normalize(vec3(0.62, 0.035, -1.0));
-            float s = max(dot(d, sunDir), 0.0);
-            col += uGlow * (pow(s, 900.0) * 3.0 + pow(s, 24.0) * 0.35) * uLow;
-            // below the horizon, fade into the haze the ground sits in
-            col = mix(col, uHorizon * 0.55, smoothstep(0.0, -0.25, h));
-            gl_FragColor = vec4(col * uReveal, 1.0);
-          }`,
-      }),
-    [],
-  );
-  const ref = useRef<THREE.Mesh>(null!);
+/** sun azimuth: ahead and to the right, over the jet's side of the frame */
+const SUN_AZIMUTH = Math.atan2(0.62, -1);
+/** sun elevation in degrees: deep twilight at cruise, setting at the runway */
+const SUN_ELEV_HIGH = -6;
+const SUN_ELEV_LOW = 0.6;
 
-  useFrame(({ camera }) => {
+/** where the sun is for a given lowness, as a unit vector (shared with lighting) */
+export function sunDirection(low: number, out = new THREE.Vector3()) {
+  const elev = THREE.MathUtils.degToRad(THREE.MathUtils.lerp(SUN_ELEV_HIGH, SUN_ELEV_LOW, low));
+  return out.setFromSphericalCoords(1, Math.PI / 2 - elev, SUN_AZIMUTH);
+}
+
+/*
+  Physically based sky (Preetham scattering, three's Sky addon). The sun
+  sits below the horizon at cruise, so the sky is a deep twilight the
+  stars show through, and rises to just above it on approach for a real
+  sunset with Mie glow around the disc. Its own procedural clouds are
+  turned off (see makeSky).
+
+  The shader is patched to multiply its final colour by uReveal (black
+  opening) and uExposure (overall brightness, tuned by altitude).
+*/
+/** three's Sky, patched with reveal + exposure and tuned for a hazy dusk */
+function makeSky() {
+  const m = new ThreeSky();
+  m.frustumCulled = false;
+  const mat = m.material as THREE.ShaderMaterial;
+  mat.fog = false;
+  mat.uniforms.uReveal = { value: 0 };
+  mat.uniforms.uExposure = { value: 1 };
+  mat.fragmentShader = mat.fragmentShader
+    .replace("uniform float time;", "uniform float time;\nuniform float uReveal;\nuniform float uExposure;")
+    .replace("gl_FragColor = vec4( texColor, 1.0 );", "gl_FragColor = vec4( texColor * uExposure * uReveal, 1.0 );");
+  const u = mat.uniforms;
+  // hazier, more scattering air than the clear-day defaults, which
+  // pushes a low sun toward deep orange instead of a white glare
+  u.turbidity.value = 12;
+  u.rayleigh.value = 4;
+  u.mieCoefficient.value = 0.005;
+  u.mieDirectionalG.value = 0.82;
+  // the addon's built-in clouds formed concentric rings around a low sun;
+  // the sprite cloud deck already does that job
+  u.cloudCoverage.value = 0;
+  return m;
+}
+
+/** shared per-frame sky state, so the visible sky and its reflection agree */
+function updateSky(sky: THREE.Mesh, low: number, r: number, sun: THREE.Vector3, time: number) {
+  const u = (sky.material as THREE.ShaderMaterial).uniforms;
+  u.sunPosition.value.copy(sun);
+  u.time.value = time;
+  u.uReveal.value = r;
+  // Preetham output is HDR; hold the exposure down near the sun-lit
+  // horizon so the sunset stays saturated after tone mapping
+  u.uExposure.value = THREE.MathUtils.lerp(0.9, 0.42, low);
+}
+
+function Sky() {
+  const sky = useMemo(() => {
+    const m = makeSky();
+    m.scale.setScalar(8000);
+    m.renderOrder = -10;
+    return m;
+  }, []);
+  const sun = useMemo(() => new THREE.Vector3(), []);
+
+  useFrame(({ camera, clock }) => {
     const low = lowness(camera.position.y);
-    mat.uniforms.uLow.value = low;
-    const r = reveal();
-    mat.uniforms.uReveal.value = r;
-    mat.uniforms.uZenith.value.copy(C.zenithHigh).lerp(C.zenithLow, low).lerp(BLACK, 1 - r);
-    mat.uniforms.uHorizon.value.copy(C.horizonHigh).lerp(C.horizonLow, Math.pow(low, 1.6)).lerp(BLACK, 1 - r);
-    ref.current.position.copy(camera.position);
+    sunDirection(low, sun);
+    updateSky(sky, low, reveal(), sun, reducedMotion ? 0 : clock.elapsedTime);
+    sky.position.copy(camera.position);
   });
 
-  return (
-    <mesh ref={ref} material={mat} renderOrder={-10} frustumCulled={false}>
-      <sphereGeometry args={[4000, 48, 24]} />
-    </mesh>
-  );
+  return <primitive object={sky} />;
 }
 
 function Stars({ count = 2600 }: { count?: number }) {
@@ -351,6 +358,11 @@ function Ground() {
             float d = distance(vWorld, uCam);
             float f = 1.0 - exp(-d * mix(0.0012, 0.0016, uLow));
             col = mix(col, uFog, clamp(f, 0.0, 1.0));
+            // colours above are authored in display (sRGB) terms; the post
+            // chain works in linear light and re-encodes at the end, so square
+            // them (gamma 2.0, close to sRGB). Squaring rather than pow() keeps
+            // this NaN-free: pow() is undefined at and below zero, and one NaN
+            // pixel gets smeared across the whole frame by the bloom blur.
             gl_FragColor = vec4(col * uReveal, 1.0);
           }`,
       }),
