@@ -75,7 +75,14 @@ function makeSky() {
   mat.uniforms.uExposure = { value: 1 };
   mat.fragmentShader = mat.fragmentShader
     .replace("uniform float time;", "uniform float time;\nuniform float uReveal;\nuniform float uExposure;")
-    .replace("gl_FragColor = vec4( texColor, 1.0 );", "gl_FragColor = vec4( texColor * uExposure * uReveal, 1.0 );");
+    // The sun disc reaches ~6e4 per channel, close to the 65504 ceiling of
+    // the half-float buffers the post chain renders into. Cap it at 64,
+    // still far above white so the sun blooms, to keep headroom for the
+    // bloom pass's filtering.
+    .replace(
+      "gl_FragColor = vec4( texColor, 1.0 );",
+      "gl_FragColor = vec4( min( texColor * uExposure, vec3( 64.0 ) ) * uReveal, 1.0 );",
+    );
   const u = mat.uniforms;
   // hazier, more scattering air than the clear-day defaults, which
   // pushes a low sun toward deep orange instead of a white glare
@@ -210,7 +217,7 @@ function Stars({ count = 2600 }: { count?: number }) {
           void main() {
             float d = length(gl_PointCoord - 0.5);
             float a = smoothstep(0.5, 0.0, d);
-            gl_FragColor = vec4(vec3(0.85, 0.9, 1.0), a * uOpacity * vTwinkle);
+            gl_FragColor = vec4(vec3(0.70, 0.79, 1.0), a * uOpacity * vTwinkle); // linear
           }`,
       }),
     [],
@@ -408,7 +415,11 @@ function Ground() {
             // them (gamma 2.0, close to sRGB). Squaring rather than pow() keeps
             // this NaN-free: pow() is undefined at and below zero, and one NaN
             // pixel gets smeared across the whole frame by the bloom blur.
-            gl_FragColor = vec4(col * uReveal, 1.0);
+            // Colours above are authored in display (sRGB) terms, but the post
+            // chain works in linear light and re-encodes at the end, so convert
+            // (gamma 2.2). Clamp first: pow() is undefined below zero, and a
+            // single NaN pixel would be smeared across the frame by the bloom.
+            gl_FragColor = vec4(pow(max(col * uReveal, vec3(0.0)), vec3(2.2)), 1.0);
           }`,
       }),
     [],

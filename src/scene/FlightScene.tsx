@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { Bloom, EffectComposer, FXAA, Noise, ToneMapping, Vignette } from "@react-three/postprocessing";
+import { BlendFunction, ToneMappingMode } from "postprocessing";
 import { Jet } from "./Jet";
 import { World } from "./World";
 import { altitudeAt, bindScroll, flight, stepFlight } from "./flight";
@@ -112,13 +114,15 @@ export default function FlightScene() {
         camera={{ fov: 40, near: 0.5, far: 9000, position: [0, altitudeAt(0) + 4, 21] }}
         gl={{ antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl }) => {
-          gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.05;
+          // tone mapping happens in the post chain instead, so bloom sees
+          // the scene's full HDR range (sun disc, afterburners, city lights)
+          gl.toneMapping = THREE.NoToneMapping;
         }}
       >
         <CameraRig />
         <World lite={lite} />
         <JetAtAltitude />
+        <Grade lite={lite} />
       </Canvas>
       {/* Darken the side the copy lives on so text stays readable over
           bright cloud and sunset without boxes behind it, while the jet's
@@ -180,5 +184,30 @@ function JetAtAltitude() {
     <primitive object={group}>
       <Jet />
     </primitive>
+  );
+}
+
+/*
+  The finishing pass. Bloom only picks up what is genuinely brighter than
+  white in HDR (sun disc, afterburner cores, runway and city lights), so
+  the copy-side of the frame and the dark sky stay clean. ACES tone
+  mapping runs here rather than on the renderer, then FXAA, a soft
+  vignette and very light film grain.
+
+  Multisampling is off on purpose: with an MSAA framebuffer, the mipmap
+  bloom pass rendered a solid black frame (no GL error) on Apple GPUs via
+  ANGLE/Metal. FXAA restores edge anti-aliasing after tone mapping; it
+  was chosen over SMAA, whose embedded lookup textures added ~58 KB
+  gzipped. Phones skip FXAA and grain to save fill rate.
+*/
+function Grade({ lite }: { lite: boolean }) {
+  return (
+    <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
+      <Bloom mipmapBlur intensity={0.9} luminanceThreshold={1} luminanceSmoothing={0.2} radius={0.7} />
+      <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+      {!lite && <FXAA />}
+      <Vignette offset={0.32} darkness={0.55} />
+      {!lite && <Noise opacity={0.035} premultiply blendFunction={BlendFunction.SCREEN} />}
+    </EffectComposer>
   );
 }

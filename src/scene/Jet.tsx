@@ -142,9 +142,10 @@ function useJetGeometry() {
   }, []);
 }
 
-function afterburnerMaterial(core: string) {
+/** `boost` lifts the colour above 1.0 so the bloom pass treats it as a light */
+function afterburnerMaterial(core: string, boost = 1) {
   return new THREE.MeshBasicMaterial({
-    color: core,
+    color: new THREE.Color(core).multiplyScalar(boost),
     transparent: true,
     opacity: 0.85,
     blending: THREE.AdditiveBlending,
@@ -204,8 +205,8 @@ export function Jet(props: { position?: [number, number, number]; scale?: number
   const g = useJetGeometry();
   const body = useRef<THREE.Group>(null!);
   const flames = useRef<THREE.Group>(null!);
-  const coreMat = useMemo(() => afterburnerMaterial("#fff1c9"), []);
-  const plumeMat = useMemo(() => afterburnerMaterial("#ff8a3d"), []);
+  const coreMat = useMemo(() => afterburnerMaterial("#fff1c9", 4), []);
+  const plumeMat = useMemo(() => afterburnerMaterial("#ff8a3d", 1.6), []);
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
